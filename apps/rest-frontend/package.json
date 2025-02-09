@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --pretty --noEmit"
   },
   "dependencies": {
     "next": "15.1.6",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@portfolio-2025/eslint-config": "workspace:*",
     "@portfolio-2025/prettier-config": "workspace:^",
     "@types/node": "^20",
     "@types/react": "^19",

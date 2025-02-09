@@ -155,6 +155,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.2.0
+      '@portfolio-2025/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
       '@portfolio-2025/prettier-config':
         specifier: workspace:^
         version: link:../../packages/prettier-config
@@ -237,6 +240,9 @@ importers:
       eslint-config-prettier:
         specifier: ^10.0.1
         version: 10.0.1(eslint@9.19.0(jiti@1.21.7))
+      eslint-plugin-nestjs:
+        specifier: ^1.2.3
+        version: 1.2.3
       eslint-plugin-only-warn:
         specifier: ^1.1.0
         version: 1.1.0
@@ -261,6 +267,9 @@ importers:
 
   packages/prettier-config:
     devDependencies:
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.4.1
+        version: 4.4.1(prettier@3.4.2)
       '@portfolio-2025/prettier-config':
         specifier: workspace:^
         version: 'link:'
@@ -582,6 +591,15 @@ packages:
   '@humanwhocodes/retry@0.4.1':
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
+
+  '@ianvs/prettier-plugin-sort-imports@4.4.1':
+    resolution: {integrity: sha512-F0/Hrcfpy8WuxlQyAWJTEren/uxKhYonOGY4OyWmwRdeTvkh9mMSCxowZLjNkhwi/2ipqCgtXwwOk7tW0mWXkA==}
+    peerDependencies:
+      '@vue/compiler-sfc': 2.7.x || 3.x
+      prettier: 2 || 3
+    peerDependenciesMeta:
+      '@vue/compiler-sfc':
+        optional: true
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -2090,6 +2108,10 @@ packages:
     engines: {node: '>=4.0'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
+
+  eslint-plugin-nestjs@1.2.3:
+    resolution: {integrity: sha512-CYS2l+oO9sZ8QN1B0/Xgz+2CERfiWCiHDmDslX30yrJrNlBNKFypeCac/7g/NE+LDuox5MH13uvd4qd52Tlt5w==}
+    engines: {npm: '>=3'}
 
   eslint-plugin-only-warn@1.1.0:
     resolution: {integrity: sha512-2tktqUAT+Q3hCAU0iSf4xAN1k9zOpjK5WO8104mB0rT/dGhOa09582HN5HlbxNbPRZ0THV7nLGvzugcNOSjzfA==}
@@ -4709,6 +4731,17 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.1': {}
 
+  '@ianvs/prettier-plugin-sort-imports@4.4.1(prettier@3.4.2)':
+    dependencies:
+      '@babel/generator': 7.26.8
+      '@babel/parser': 7.26.8
+      '@babel/traverse': 7.26.8
+      '@babel/types': 7.26.8
+      prettier: 3.4.2
+      semver: 7.7.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
       '@img/sharp-libvips-darwin-arm64': 1.0.4
@@ -6621,6 +6654,10 @@ snapshots:
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
+
+  eslint-plugin-nestjs@1.2.3:
+    dependencies:
+      tslib: 1.14.1
 
   eslint-plugin-only-warn@1.1.0: {}
 

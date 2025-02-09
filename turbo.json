@@ -10,8 +10,10 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "outputs": [],
+      "inputs": ["apps/**/src/**/*.{ts,tsx}", "packages/ui/**/*.{ts,tsx}"]
     },
     "dev": {
       "cache": false,
