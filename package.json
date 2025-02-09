@@ -1,6 +1,6 @@
 {
   "name": "portfolio-2025-ec-multicloud",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -15,5 +15,6 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
-  }
+  },
+  "prettier": "@portfolio-2025/prettier-config"
 }
