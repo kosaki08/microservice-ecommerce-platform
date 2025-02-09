@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "portfolio-2025-ec-multicloud",
   "private": true,
   "scripts": {
     "build": "turbo build",
