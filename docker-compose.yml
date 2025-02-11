@@ -1,0 +1,43 @@
+services:
+  rest-backend:
+    build:
+      context: .
+      dockerfile: ./apps/rest-backend/Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/rest-backend/src:/app/apps/rest-backend/src
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+
+  rest-frontend:
+    build:
+      context: .
+      dockerfile: ./apps/rest-frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/rest-frontend/src:/app/apps/rest-frontend/src
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - rest-backend
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
