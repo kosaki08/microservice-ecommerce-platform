@@ -3,27 +3,47 @@
   "version": "0.0.0",
   "license": "MIT",
   "exports": {
-    "./button": "./src/button.tsx",
-    "./card": "./src/card.tsx",
-    "./code": "./src/code.tsx"
+    "./globals.css": "./src/styles/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./tailwind.config": "./tailwind.config.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
+    "build": "tsc",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "type-check": "tsc --pretty --noEmit"
   },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "0.456.0",
+    "next-themes": "^0.4.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
+  },
   "devDependencies": {
     "@portfolio-2025/eslint-config": "workspace:*",
-    "@portfolio-2025/prettier-config": "workspace:^",
+    "@portfolio-2025/prettier-config": "workspace:^*",
     "@portfolio-2025/typescript-config": "workspace:*",
     "@turbo/gen": "^2.4.0",
     "@types/node": "^22.13.0",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9.19.0",
+    "postcss": "^8.4.47",
+    "react": "^18.3.1",
+    "tailwindcss": "^3.4.14",
     "typescript": "5.7.3"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
