@@ -1,20 +1,52 @@
 services:
-  rest-backend:
+  vault-service:
     build:
       context: .
-      dockerfile: ./apps/rest-backend/Dockerfile
+      dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile
     ports:
-      - "3001:3001"
+      - "3010:3010"
     volumes:
-      - ./apps/rest-backend/src:/app/apps/rest-backend/src
+      - ./apps/rest-backend/services/vault-service/src:/app/apps/rest-backend/services/vault-service/src
       - /app/node_modules
     environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
-      - REDIS_URL=redis://redis:6379
       - NODE_ENV=development
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=root_token_for_development
+      - AUTH_TOKEN_TTL=1h
+      - ROTATION_SCHEDULE=0 0 * * * # 毎日0時にローテーション
+      - LOG_LEVEL=debug
     depends_on:
-      - postgres
-      - redis
+      - vault
+
+  vault:
+    image: vault:1.13.3
+    container_name: vault
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      - VAULT_ADDR=http://0.0.0.0:8200
+    cap_add:
+      - IPC_LOCK
+    command: server -dev
+
+  # user-service:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile
+  #   ports:
+  #     - "3010:3010"
+  #   volumes:
+  #     - ./apps/rest-backend/services/vault-service/src:/app/apps/rest-backend/services/vault-service/src
+  #     - /app/node_modules
+  #   environment:
+  #     - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
+  #     - REDIS_URL=redis://redis:6379
+  #     - NODE_ENV=development
+  #   depends_on:
+  #     - postgres
+  #     - redis
 
   rest-frontend:
     build:
@@ -28,10 +60,21 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - VAULT_SERVICE_URL=http://vault-service:3010
+      - USER_SERVICE_URL=http://user-service:3001
+      - ORDER_SERVICE_URL=http://order-service:3002
+      - PAYMENT_SERVICE_URL=http://payment-service:3003
+      - PRODUCT_SERVICE_URL=http://product-service:3004
+      - GATEWAY_URL=http://gateway:3000
     depends_on:
-      - rest-backend
+      - vault-service
+      # - order-service
+      # - payment-service
+      # - product-service
+      # - gateway
     networks:
       - monitoring
+      - backend
 
   postgres:
     image: postgres:14
@@ -102,4 +145,6 @@ volumes:
 
 networks:
   monitoring:
+    driver: bridge
+  backend:
     driver: bridge

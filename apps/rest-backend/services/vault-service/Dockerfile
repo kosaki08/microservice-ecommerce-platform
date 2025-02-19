@@ -11,21 +11,20 @@ RUN corepack prepare pnpm@latest --activate
 COPY pnpm-*.* ./
 COPY package.json turbo.json ./
 
-# 全パッケージのpackage.jsonをコピー
-COPY packages/ui/package.json ./packages/ui/
+# 必要なパッケージのpackage.jsonをコピー
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/prettier-config/package.json ./packages/prettier-config/
-COPY apps/rest-backend/package.json ./apps/rest-backend/
+COPY apps/rest-backend/services/vault-service/package.json ./apps/rest-backend/services/vault-service/
 
 # 依存関係をインストール
 RUN pnpm install --frozen-lockfile
 
-# ソースコードをコピー
+# 必要なソースコードをコピー
 COPY packages ./packages
-COPY apps/rest-backend ./apps/rest-backend
+COPY apps/rest-backend/services/vault-service ./apps/rest-backend/services/vault-service
 
 # パスを設定
 ENV PATH /app/node_modules/.bin:$PATH
 
-CMD ["pnpm", "run", "--filter", "rest-backend", "start:dev"]
+CMD ["pnpm", "run", "--filter", "vault-service", "start:dev"]
