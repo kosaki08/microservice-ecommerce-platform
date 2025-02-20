@@ -2,6 +2,18 @@
   "name": "@portfolio-2025/typescript-config",
   "version": "0.0.0",
   "license": "MIT",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nestjs.json",
+    "react-library.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./nextjs.json": "./nextjs.json",
+    "./nestjs.json": "./nestjs.json",
+    "./react-library.json": "./react-library.json"
+  },
   "publishConfig": {
     "access": "public"
   },
