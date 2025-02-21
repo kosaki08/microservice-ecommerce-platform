@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRODUCT_DB_URL")
+}
+
+model Category {
+  id            String    @id @default(uuid())
+  parent_id     String?
+  name          String
+  slug          String    @unique
+  description   String?
+  display_order Int?
+  is_visible    Boolean   @default(true)
+  metadata      Json?     @db.JsonB
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+
+  parent        Category?  @relation("Subcategory", fields: [parent_id], references: [id])
+  subcategories Category[] @relation("Subcategory")
+  products      Product[]
+
+  @@index([parent_id])
+  @@index([slug])
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
+
+model Product {
+  id             String        @id @default(uuid())
+  category_id    String
+  name           String
+  slug           String        @unique
+  description    String?
+  base_price     Decimal       @db.Decimal(10, 0)
+  status         ProductStatus
+  // specifications schema:
+  // {
+  //   weight: number
+  //   dimensions: {
+  //     width: number
+  //     height: number
+  //     depth: number
+  //   }
+  // }
+  specifications Json?         @db.JsonB
+  brand          String?
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+  deleted_at     DateTime?
+
+  category Category         @relation(fields: [category_id], references: [id])
+  variants ProductVariant[]
+  images   ProductImage[]
+
+  @@index([category_id])
+  @@index([status, category_id])
+  @@index([name])
+}
+
+enum VariantStatus {
+  ACTIVE
+  INACTIVE
+  OUT_OF_STOCK
+}
+
+model ProductVariant {
+  id               String        @id @default(uuid())
+  product_id       String
+  sku              String        @unique
+  attributes       Json?         @db.JsonB
+  price_adjustment Decimal       @db.Decimal(10, 0)
+  status           VariantStatus
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
+  product Product @relation(fields: [product_id], references: [id])
+  stock   Stock?
+
+  @@index([product_id])
+  @@index([sku])
+}
+
+model ProductImage {
+  id            String   @id @default(uuid())
+  product_id    String
+  url           String
+  alt_text      String?
+  display_order Int?
+  is_primary    Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@index([product_id])
+}
+
+enum StockStatus {
+  IN_STOCK
+  LOW_STOCK
+  OUT_OF_STOCK
+  DISCONTINUED
+}
+
+model Stock {
+  id                  String      @id @default(uuid())
+  variant_id          String      @unique
+  quantity            Int
+  reserved_quantity   Int
+  available_quantity  Int
+  low_stock_threshold Int?
+  status              StockStatus
+  last_counted_at     DateTime?
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @updatedAt
+
+  variant   ProductVariant @relation(fields: [variant_id], references: [id])
+  movements Movement[]
+
+  @@index([status])
+}
+
+enum MovementType {
+  PURCHASE
+  SALE
+  RETURN
+  ADJUSTMENT
+  INVENTORY_COUNT
+}
+
+model Movement {
+  id              String       @id @default(uuid())
+  stock_id        String
+  quantity_change Int
+  movement_type   MovementType
+  reference_id    String?
+  reference_type  String?
+  metadata        Json?        @db.JsonB
+  created_by      String?
+  created_at      DateTime     @default(now())
+
+  stock Stock @relation(fields: [stock_id], references: [id])
+
+  @@index([stock_id])
+  @@index([movement_type])
+}
