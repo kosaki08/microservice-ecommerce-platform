@@ -31,22 +31,22 @@ services:
       - IPC_LOCK
     command: server -dev
 
-  # user-service:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile
-  #   ports:
-  #     - "3010:3010"
-  #   volumes:
-  #     - ./apps/rest-backend/services/vault-service/src:/app/apps/rest-backend/services/vault-service/src
-  #     - /app/node_modules
-  #   environment:
-  #     - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
-  #     - REDIS_URL=redis://redis:6379
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - postgres
-  #     - redis
+  user-service:
+    build:
+      context: .
+      dockerfile: ./apps/rest-backend/services/user-service/Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/rest-backend/services/user-service/src:/app/apps/rest-backend/services/user-service/src
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+      - redis
 
   rest-frontend:
     build:
@@ -68,6 +68,7 @@ services:
       - GATEWAY_URL=http://gateway:3000
     depends_on:
       - vault-service
+      - user-service
       # - order-service
       # - payment-service
       # - product-service
