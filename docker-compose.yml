@@ -1,4 +1,21 @@
 services:
+  vault:
+    image: vault:1.13.3
+    container_name: vault
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      - VAULT_ADDR=http://0.0.0.0:8200
+    volumes:
+      - ./vault/config:/vault/config
+      - ./vault/policies:/vault/policies
+      - ./vault/scripts:/vault/scripts
+    cap_add:
+      - IPC_LOCK
+    command: server -dev -dev-listen-address=0.0.0.0:8200
+
   vault-service:
     build:
       context: .
@@ -17,19 +34,6 @@ services:
       - LOG_LEVEL=debug
     depends_on:
       - vault
-
-  vault:
-    image: vault:1.13.3
-    container_name: vault
-    ports:
-      - "8200:8200"
-    environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
-      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
-      - VAULT_ADDR=http://0.0.0.0:8200
-    cap_add:
-      - IPC_LOCK
-    command: server -dev
 
   user-service:
     build:
@@ -95,54 +99,54 @@ services:
     volumes:
       - redis_data:/data
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "password"
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "password"
+  #   ports:
+  #     - "5050:80"
+  #   depends_on:
+  #     - postgres
 
-  redis-commander:
-    image: rediscommander/redis-commander
-    environment:
-      - REDIS_HOSTS=redis:redis:6379
-    ports:
-      - "8081:8081"
-    depends_on:
-      - redis
+  # redis-commander:
+  #   image: rediscommander/redis-commander
+  #   environment:
+  #     - REDIS_HOSTS=redis:redis:6379
+  #   ports:
+  #     - "8081:8081"
+  #   depends_on:
+  #     - redis
 
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    ports:
-      - "9090:9090"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-    networks:
-      - monitoring
+  # prometheus:
+  #   image: prom/prometheus
+  #   volumes:
+  #     - ./prometheus:/etc/prometheus
+  #     - prometheus_data:/prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--storage.tsdb.path=/prometheus"
+  #   networks:
+  #     - monitoring
 
-  grafana:
-    image: grafana/grafana
-    depends_on:
-      - prometheus
-    ports:
-      - "3002:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - monitoring
+  # grafana:
+  #   image: grafana/grafana
+  #   depends_on:
+  #     - prometheus
+  #   ports:
+  #     - "3002:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   networks:
+  #     - monitoring
 
 volumes:
   postgres_data:
   redis_data:
-  prometheus_data:
-  grafana_data:
+  # prometheus_data:
+  # grafana_data:
 
 networks:
   monitoring:

@@ -32,10 +32,6 @@ export const nestConfig = [
       "@typescript-eslint/explicit-member-accessibility": ["error"],
       // 戻り値の型を明示的に指定することを推奨
       "@typescript-eslint/explicit-function-return-type": ["error"],
-      // 未使用の変数をエラーに
-      "@typescript-eslint/no-unused-vars": ["error"],
-      // any型の使用を制限
-      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
   {
