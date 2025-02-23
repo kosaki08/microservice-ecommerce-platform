@@ -4,7 +4,8 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@portfolio-2025/ui/*": ["./src/*"]
+      "@portfolio-2025/ui/*": ["./src/*"],
+      "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"]
     }
   },
   "include": ["."],

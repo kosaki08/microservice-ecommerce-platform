@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@portfolio-2025/ui/*": ["../../packages/ui/src/*"]
+      "@portfolio-2025/ui/*": ["../../packages/ui/src/*"],
+      "@portfolio-2025/eslint-config/*": ["../../packages/eslint-config/*"]
     },
     "plugins": [
       {
