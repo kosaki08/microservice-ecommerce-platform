@@ -3,3 +3,9 @@ node_modules
 dist
 build
 .turbo
+
+!/apps/rest-backend/services/**/dist
+!/apps/rest-backend/services/**/node_modules
+!/apps/rest-backend/services/**/.next
+!/apps/rest-backend/services/**/build
+!/apps/rest-backend/services/**/.turbo

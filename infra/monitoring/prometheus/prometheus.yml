@@ -14,10 +14,10 @@ scrape_configs:
       - targets: ["vault-service:3010"]
     metrics_path: "/metrics"
 
-  # - job_name: "user-service"
-  #   static_configs:
-  #     - targets: ["user-service:3001"]
-  #   metrics_path: "/metrics"
+  - job_name: "user-service"
+    static_configs:
+      - targets: ["user-service:3001"]
+    metrics_path: "/metrics"
 
   # - job_name: "order-service"
   #   static_configs:

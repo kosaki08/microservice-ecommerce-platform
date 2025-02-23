@@ -4,15 +4,12 @@ services:
     ports:
       - "8200:8200"
     volumes:
-      - ../../infra/secrets/vault/policies:/vault/policies
-      - ../../infra/secrets/vault/scripts:/vault/scripts
+      - ../infra/secrets/vault/policies:/vault/policies
+      - ../infra/secrets/vault/scripts:/vault/scripts
     cap_add:
       - IPC_LOCK
 
   vault-service:
-    build:
-      context: ../../
-      dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile
     ports:
       - "3010:3010"
     environment:
@@ -23,9 +20,6 @@ services:
       - vault
 
   user-service:
-    build:
-      context: ../../
-      dockerfile: ./apps/rest-backend/services/user-service/Dockerfile
     ports:
       - "3001:3001"
     depends_on:
@@ -34,7 +28,7 @@ services:
 
   rest-frontend:
     build:
-      context: ../../
+      context: ../
       dockerfile: ./apps/rest-frontend/Dockerfile
     ports:
       - "3000:3000"
@@ -63,35 +57,38 @@ services:
     volumes:
       - redis_data:/data
 
-  # prometheus:
-  #   image: prom/prometheus
-  #   volumes:
-  #     - ../../infra/monitoring/prometheus:/etc/prometheus
-  #     - prometheus_data:/prometheus
-  #   ports:
-  #     - "9090:9090"
-  #   command:
-  #     - "--config.file=/etc/prometheus/prometheus.yml"
-  #     - "--storage.tsdb.path=/prometheus"
-  #   networks:
-  #     - monitoring
+  prometheus:
+    profiles: ["monitoring"]
+    image: prom/prometheus
+    volumes:
+      - ../infra/monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - monitoring
 
-  # grafana:
-  #   image: grafana/grafana
-  #   depends_on:
-  #     - prometheus
-  #   ports:
-  #     - "3002:3000"
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #   networks:
-  #     - monitoring
+  grafana:
+    profiles: ["monitoring"]
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3002:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../infra/monitoring/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - monitoring
 
 volumes:
   postgres_data:
   redis_data:
-  # prometheus_data:
-  # grafana_data:
+  prometheus_data:
+  grafana_data:
 
 networks:
   monitoring:

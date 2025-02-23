@@ -206,7 +206,7 @@ importers:
   apps/rest-frontend:
     dependencies:
       '@portfolio-2025/ui':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/ui
       next:
         specifier: 15.1.6
@@ -222,13 +222,13 @@ importers:
         specifier: ^3
         version: 3.2.0
       '@portfolio-2025/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/eslint-config
       '@portfolio-2025/prettier-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/prettier-config
       '@portfolio-2025/typescript-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^20
@@ -267,10 +267,10 @@ importers:
         specifier: ^15.1.6
         version: 15.1.6
       '@portfolio-2025/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: 'link:'
       '@portfolio-2025/prettier-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../prettier-config
       eslint:
         specifier: ^9.19.0
@@ -349,13 +349,13 @@ importers:
         version: 3.24.2
     devDependencies:
       '@portfolio-2025/eslint-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../eslint-config
       '@portfolio-2025/prettier-config':
-        specifier: workspace:^*
+        specifier: workspace:^
         version: link:../prettier-config
       '@portfolio-2025/typescript-config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../typescript-config
       '@turbo/gen':
         specifier: ^2.4.0

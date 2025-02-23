@@ -10,16 +10,16 @@
     "type-check": "tsc --pretty --noEmit"
   },
   "dependencies": {
-    "@portfolio-2025/ui": "workspace:*",
+    "@portfolio-2025/ui": "workspace:^",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@portfolio-2025/eslint-config": "workspace:*",
-    "@portfolio-2025/prettier-config": "workspace:*",
-    "@portfolio-2025/typescript-config": "workspace:*",
+    "@portfolio-2025/eslint-config": "workspace:^",
+    "@portfolio-2025/prettier-config": "workspace:^",
+    "@portfolio-2025/typescript-config": "workspace:^",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

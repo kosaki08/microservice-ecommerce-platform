@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -20,11 +20,19 @@ COPY apps/rest-backend/services/vault-service/package.json ./apps/rest-backend/s
 # 依存関係をインストール
 RUN pnpm install --frozen-lockfile
 
-# 必要なソースコードをコピー
+# ソースコードをコピー
 COPY packages ./packages
-COPY apps/rest-backend/services/vault-service ./apps/rest-backend/services/vault-service
+COPY apps/rest-backend/services/vault-service/ ./apps/rest-backend/services/vault-service/
 
-# パスを設定
-ENV PATH /app/node_modules/.bin:$PATH
+# ビルド
+RUN pnpm run --filter vault-service build
 
-CMD ["pnpm", "run", "--filter", "vault-service", "start:dev"]
+# 本番環境用イメージ
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
+CMD ["node", "dist/main.js"]

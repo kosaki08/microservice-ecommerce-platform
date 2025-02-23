@@ -29,9 +29,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@portfolio-2025/eslint-config": "workspace:*",
-    "@portfolio-2025/prettier-config": "workspace:^*",
-    "@portfolio-2025/typescript-config": "workspace:*",
+    "@portfolio-2025/eslint-config": "workspace:^",
+    "@portfolio-2025/prettier-config": "workspace:^",
+    "@portfolio-2025/typescript-config": "workspace:^",
     "@turbo/gen": "^2.4.0",
     "@types/node": "^22.13.0",
     "@types/react": "19.0.8",

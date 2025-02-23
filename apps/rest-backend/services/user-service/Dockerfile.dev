@@ -1,0 +1,15 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# pnpmのインストール
+RUN npm install -g corepack@latest
+RUN corepack enable
+RUN corepack prepare pnpm@latest --activate
+
+# 開発用のエントリーポイントをコピー
+COPY ./docker/entrypoints/entrypoint-dev.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint-dev.sh
+
+ENTRYPOINT ["entrypoint-dev.sh"]
+CMD ["pnpm", "run", "--filter", "user-service", "start:dev"]

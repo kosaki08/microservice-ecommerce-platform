@@ -3,14 +3,18 @@ services:
     container_name: vault-dev
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
-    command: server -dev -dev-listen-address=0.0.0.0:8200
+    command: server -dev -dev-listen-address=0.0.0.0:8200 -config=/vault/config/vault-config.hcl
     volumes:
-      - ../../infra/secrets/vault/config/development:/vault/config
-      - ../../infra/secrets/vault/data/development:/vault/data
+      - ../infra/secrets/vault/config/development:/vault/config
 
   vault-service:
+    build:
+      context: ../
+      dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile.dev
+      args:
+        ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
     volumes:
-      - ../../apps/rest-backend/services/vault-service/src:/app/apps/rest-backend/services/vault-service/src
+      - ../:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -19,8 +23,13 @@ services:
       - LOG_LEVEL=debug
 
   user-service:
+    build:
+      context: ../
+      dockerfile: ./apps/rest-backend/services/user-service/Dockerfile.dev
+      args:
+        ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
     volumes:
-      - ../../apps/rest-backend/services/user-service/src:/app/apps/rest-backend/services/user-service/src
+      - ../:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -32,8 +41,8 @@ services:
 
   rest-frontend:
     volumes:
-      - ../../apps/rest-frontend/src:/app/apps/rest-frontend/src
-      - ../../packages/ui:/app/packages/ui
+      - ../apps/rest-frontend/src:/app/apps/rest-frontend/src
+      - ../packages/ui:/app/packages/ui
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -67,29 +76,37 @@ services:
     volumes:
       - redis_data:/data
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
-  #     PGADMIN_DEFAULT_PASSWORD: "password"
-  #   ports:
-  #     - "5050:80"
-  #   depends_on:
-  #     - postgres
+  pgadmin:
+    profiles: ["debug"]
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
 
-  # redis-commander:
-  #   image: rediscommander/redis-commander
-  #   environment:
-  #     - REDIS_HOSTS=redis:redis:6379
-  #   ports:
-  #     - "8081:8081"
-  #   depends_on:
-  #     - redis
+  redis-commander:
+    profiles: ["debug"]
+    image: rediscommander/redis-commander
+    environment:
+      - REDIS_HOSTS=redis:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
 
-  # prometheus:
-  #   ports:
-  #     - "9090:9090"
+  prometheus:
+    profiles: ["monitoring"]
+    environment:
+      - PROMETHEUS_ENV=development
+    volumes:
+      - ../infra/monitoring/prometheus:/etc/prometheus
 
-  # grafana:
-  #   ports:
-  #     - "3002:3000"
+  grafana:
+    profiles: ["monitoring"]
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=false
