@@ -1,29 +1,41 @@
-.PHONY: install-deps start stop logs prisma-migrate prisma-generate prisma-studio help
+.PHONY: up down exec restart logs install-deps prisma-migrate prisma-generate prisma-studio help
 
-install-deps: ## 依存パッケージのインストール
-	docker compose exec $(service) pnpm add $(pkg) --filter @portfolio-2025/$(service)
+up: ## アプリケーションの起動（開発環境）
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml up
 
-start: ## アプリケーションの起動
-	docker compose up -d
+down: ## アプリケーションの停止（開発環境）
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml down --volumes --remove-orphans
 
-stop: ## アプリケーションの停止
-	docker compose down
+exec: ## コンテナ内でコマンドを実行 (例: make exec service=user-service cmd="pnpm install")
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml exec $(service) $(cmd)
+
+restart: ## アプリケーションの再起動
+ifeq ($(service),)
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml restart
+else
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml restart $(service)
+endif
 
 logs: ## ログの表示
 ifeq ($(service),)
-	docker compose logs -f
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml logs -f
 else
-	docker compose logs -f $(service)
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml logs -f $(service)
 endif
 
+install-deps: ## 依存パッケージのインストール
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml exec $(service) pnpm add $(pkg) --filter @portfolio-2025/$(service)
+
 prisma-migrate: ## Prismaのマイグレーション
-	docker compose exec $(service) npx prisma migrate dev
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml exec $(service) npx prisma migrate dev
 
 prisma-generate: ## Prismaのモデル生成
-	docker compose exec $(service) npx prisma generate
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml exec $(service) npx prisma generate
 
 prisma-studio: ## Prisma Studioの起動
-	docker compose exec $(service) npx prisma studio
+	docker compose -f docker/local/docker-compose.base.yml -f docker/local/docker-compose.dev.yml exec $(service) npx prisma studio
 
 help: ## コマンド一覧を表示
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.DEFAULT_GOAL := help

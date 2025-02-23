@@ -1,0 +1,84 @@
+services:
+  vault:
+    container_name: vault-prod
+    command: server -config=/vault/config/vault-config.hcl
+    volumes:
+      - ../../infra/secrets/vault/config/production:/vault/config
+      - ../../infra/secrets/vault/data/production:/vault/data
+
+  vault-service:
+    environment:
+      - NODE_ENV=production
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - AUTH_TOKEN_TTL=15m
+      - ROTATION_SCHEDULE=0 */4 * * *
+      - LOG_LEVEL=info
+    secrets:
+      - vault_token
+
+  user-service:
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      - postgres
+      - redis
+
+  rest-frontend:
+    environment:
+      - NODE_ENV=production
+      - VAULT_SERVICE_URL=${VAULT_SERVICE_URL}
+      - USER_SERVICE_URL=${USER_SERVICE_URL}
+      - ORDER_SERVICE_URL=${ORDER_SERVICE_URL}
+      - PAYMENT_SERVICE_URL=${PAYMENT_SERVICE_URL}
+      - PRODUCT_SERVICE_URL=${PRODUCT_SERVICE_URL}
+      - GATEWAY_URL=${GATEWAY_URL}
+    depends_on:
+      - vault-service
+      - user-service
+      # - order-service
+      # - payment-service
+      # - product-service
+      # - gateway
+    networks:
+      - monitoring
+      - backend
+
+  postgres:
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   volumes:
+  #     - ./prometheus:/etc/prometheus
+  #     - prometheus_data:/prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--storage.tsdb.path=/prometheus"
+  #   networks:
+  #     - monitoring
+
+  # grafana:
+  #   image: grafana/grafana
+  #   depends_on:
+  #     - prometheus
+  #   ports:
+  #     - "3002:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   networks:
+  #     - monitoring
