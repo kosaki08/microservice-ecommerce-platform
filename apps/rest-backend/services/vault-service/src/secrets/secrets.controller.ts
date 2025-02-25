@@ -1,9 +1,9 @@
-import type { VaultService, SecretData } from "@/src/secrets/secrets.service";
+import type { SecretsService, SecretData } from "@/src/secrets/secrets.service";
 import { Controller, Get, Post, Param, Body } from "@nestjs/common";
 
 @Controller("secrets")
 export class SecretsController {
-  public constructor(private readonly vaultService: VaultService) {}
+  public constructor(private readonly vaultService: SecretsService) {}
 
   @Post()
   public async createSecret(@Body() secretData: { path: string; data: SecretData }): Promise<void> {
