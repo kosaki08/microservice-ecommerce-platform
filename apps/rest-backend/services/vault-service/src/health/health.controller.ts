@@ -1,15 +1,15 @@
 import { Controller, Get } from "@nestjs/common";
-import { HealthCheck, HealthCheckService } from "@nestjs/terminus";
+import { HealthCheck, HealthCheckService, type HealthCheckResult, type HealthIndicatorResult } from "@nestjs/terminus";
 
 @Controller("api/health")
 export class HealthController {
-  constructor(private health: HealthCheckService) {}
+  public constructor(private health: HealthCheckService) {}
 
   @Get()
   @HealthCheck()
-  check() {
+  public check(): Promise<HealthCheckResult> {
     return this.health.check([
-      () => ({
+      (): HealthIndicatorResult => ({
         api: {
           status: "up",
         },

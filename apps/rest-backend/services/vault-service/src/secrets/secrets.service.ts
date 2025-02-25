@@ -15,33 +15,24 @@ interface VaultResponse {
 export class VaultService {
   private client: vault.client;
 
-  constructor() {
+  public constructor() {
     this.client = vault({
       apiVersion: "v1",
-      endpoint: process.env.VAULT_ADDR || "http://vault:8200",
-      token: process.env.VAULT_TOKEN || "root_token_for_development",
+      endpoint: process.env.VAULT_ADDR ?? "http://vault:8200",
+      token: process.env.VAULT_TOKEN ?? "root_token_for_development",
     });
   }
 
-  async writeSecret(path: string, data: SecretData): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.client.write(`secret/data/${path}`, { data }, (err: Error | null) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
+  public async writeSecret(path: string, data: SecretData): Promise<void> {
+    await this.client.write(`secret/data/${path}`, { data });
   }
 
-  async readSecret(path: string): Promise<SecretData | null> {
-    return new Promise((resolve, reject) => {
-      this.client.read(`secret/data/${path}`, (err: Error | null, result: VaultResponse) => {
-        if (err) reject(err);
-        resolve(result?.data?.data || null);
-      });
-    });
+  public async readSecret(path: string): Promise<SecretData | null> {
+    const result = (await this.client.read(`secret/data/${path}`)) as VaultResponse;
+    return result?.data?.data || null;
   }
 
-  async rotateSecret(path: string): Promise<void> {
+  public async rotateSecret(path: string): Promise<void> {
     const newSecret = this.generateNewSecret();
     await this.writeSecret(path, newSecret);
   }

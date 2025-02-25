@@ -21,10 +21,10 @@ export const config = [
     },
     rules: {
       "turbo/no-undeclared-env-vars": "error",
-      // 未使用の変数をエラーに
       "@typescript-eslint/no-unused-vars": ["error"],
-      // any型の使用をエラーに
       "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/prefer-nullish-coalescing": "error",
+      "@typescript-eslint/prefer-optional-chain": "error",
     },
   },
 ];

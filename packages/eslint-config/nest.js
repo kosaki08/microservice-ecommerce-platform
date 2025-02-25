@@ -26,7 +26,6 @@ export const nestConfig = [
       "nestjs/use-validation-pipe": "error",
       "@typescript-eslint/explicit-member-accessibility": ["error"],
       "@typescript-eslint/explicit-function-return-type": ["error"],
-      "@typescript-eslint/no-explicit-any": "error",
     },
   },
   {

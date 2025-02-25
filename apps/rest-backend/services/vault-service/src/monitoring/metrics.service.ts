@@ -7,7 +7,7 @@ export class MetricsService {
   private readonly httpRequestsCounter: Counter;
   private readonly activeUsersGauge: Gauge;
 
-  constructor() {
+  public constructor() {
     this.registry = new Registry();
 
     this.httpRequestsCounter = new Counter({
@@ -25,15 +25,15 @@ export class MetricsService {
     this.registry.registerMetric(this.activeUsersGauge);
   }
 
-  incrementHttpRequests(method: string, path: string, status: number): void {
+  public incrementHttpRequests(method: string, path: string, status: number): void {
     this.httpRequestsCounter.inc({ method, path, status: status.toString() });
   }
 
-  setActiveUsers(count: number): void {
+  public setActiveUsers(count: number): void {
     this.activeUsersGauge.set(count);
   }
 
-  async getMetrics(): Promise<string> {
+  public async getMetrics(): Promise<string> {
     return this.registry.metrics();
   }
 }

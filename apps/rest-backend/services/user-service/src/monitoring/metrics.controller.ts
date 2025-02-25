@@ -1,12 +1,12 @@
 import { Controller, Get } from "@nestjs/common";
-import { MetricsService } from "./metrics.service";
+import type { MetricsService } from "@/src/monitoring/metrics.service";
 
 @Controller("metrics")
 export class MetricsController {
-  constructor(private readonly metricsService: MetricsService) {}
+  public constructor(private readonly metricsService: MetricsService) {}
 
   @Get()
-  async getMetrics(): Promise<string> {
+  public async getMetrics(): Promise<string> {
     return await this.metricsService.getMetrics();
   }
 }
