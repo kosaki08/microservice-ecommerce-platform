@@ -2,11 +2,12 @@
   "extends": "@portfolio-2025/typescript-config/nestjs.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "@/*": ["./*"],
       "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/**/*", "eslint.config.mjs"],
   "exclude": ["node_modules", "dist"]
 }

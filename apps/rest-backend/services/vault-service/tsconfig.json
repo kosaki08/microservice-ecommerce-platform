@@ -2,6 +2,7 @@
   "extends": "@portfolio-2025/typescript-config/nestjs.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "@/*": ["./*"],
       "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"]
