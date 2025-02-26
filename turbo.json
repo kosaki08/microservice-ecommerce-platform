@@ -6,10 +6,11 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "!**/node_modules/**", "!.turbo", "!**/*.md", "!**/__tests__/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "inputs": ["$TURBO_DEFAULT$", "eslint.config.mjs", ".husky/**"]
     },
     "type-check": {
       "dependsOn": ["^type-check"],

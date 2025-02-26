@@ -6,14 +6,34 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "type-check": "turbo run type-check"
+    "type-check": "turbo run type-check",
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix --max-warnings 0",
+      "prettier --write",
+      "tsc --pretty --noEmit"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@portfolio-2025/eslint-config": "workspace:^",
+    "@portfolio-2025/prettier-config": "workspace:^",
+    "@portfolio-2025/typescript-config": "workspace:^",
+    "eslint": "^9.19.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
     "turbo": "^2.4.0",
     "typescript": "5.7.3"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.2.1",
   "engines": {
     "node": ">=18"
   },
