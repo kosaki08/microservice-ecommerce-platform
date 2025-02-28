@@ -2,10 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# pnpmのインストール
-RUN npm install -g corepack@latest
-RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
+# 必要なパッケージをインストール
+RUN apk add --no-cache git openssh-client && \
+  npm install -g corepack@latest && \
+  corepack enable && \
+  corepack prepare pnpm@latest --activate
 
 # 開発用のエントリーポイントをコピー
 COPY ./docker/entrypoints/entrypoint-dev.sh /usr/local/bin/

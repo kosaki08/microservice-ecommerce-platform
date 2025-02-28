@@ -3,6 +3,10 @@ node_modules
 dist
 build
 .turbo
+*.log
+.env
+Dockerfile*
+docker-compose*.yml
 
 !/apps/rest-backend/services/**/dist
 !/apps/rest-backend/services/**/node_modules

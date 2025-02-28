@@ -33,6 +33,9 @@ services:
       - redis
 
   rest-frontend:
+  build:
+    context: ../
+    dockerfile: ./apps/rest-frontend/Dockerfile
     environment:
       - NODE_ENV=production
       - VAULT_SERVICE_URL=${VAULT_SERVICE_URL}

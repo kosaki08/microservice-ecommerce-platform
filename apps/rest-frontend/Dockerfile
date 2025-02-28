@@ -1,17 +1,16 @@
-FROM node:18-alpine
+# Stage 1: Builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
 # pnpmのインストール
-RUN npm install -g corepack@latest
-RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
+RUN npm install -g corepack@latest && \
+  corepack enable && \
+  corepack prepare pnpm@latest --activate
 
-# ワークスペース設定ファイルをコピー
+# 依存関係ファイルのコピー
 COPY pnpm-*.* ./
 COPY package.json turbo.json ./
-
-# 全パッケージのpackage.jsonをコピー
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
@@ -22,10 +21,24 @@ COPY apps/rest-frontend/package.json ./apps/rest-frontend/
 RUN pnpm install --frozen-lockfile
 
 # ソースコードをコピー
-COPY packages ./packages
-COPY apps/rest-frontend ./apps/rest-frontend
+COPY . .
 
-# パスを設定
-ENV PATH /app/node_modules/.bin:$PATH
+# ビルドを実行
+RUN pnpm run --filter rest-frontend build
 
-CMD ["pnpm", "run", "--filter", "rest-frontend", "dev"]
+# Stage 2: Runner
+FROM node:18-slim
+
+WORKDIR /app
+
+# ビルド成果物をコピー
+COPY --from=builder /app/apps/rest-frontend/.next/standalone ./
+COPY --from=builder /app/apps/rest-frontend/.next/static ./apps/rest-frontend/.next/static
+COPY --from=builder /app/apps/rest-frontend/public ./apps/rest-frontend/public
+
+# 本番環境変数
+ENV NODE_ENV production
+ENV PORT 3000
+
+# 起動コマンド
+CMD ["node", "apps/rest-frontend/server.js"]

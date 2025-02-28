@@ -40,6 +40,9 @@ services:
       - redis
 
   rest-frontend:
+    build:
+      context: ../
+      dockerfile: ./apps/rest-frontend/Dockerfile.dev
     volumes:
       - ../apps/rest-frontend/src:/app/apps/rest-frontend/src
       - ../packages/ui:/app/packages/ui
