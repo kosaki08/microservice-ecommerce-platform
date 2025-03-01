@@ -16,7 +16,6 @@
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "@next/eslint-plugin-next": "^15.1.6",
-    "@portfolio-2025/prettier-config": "workspace:^",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-nestjs": "^1.2.3",
@@ -27,6 +26,5 @@
     "globals": "^15.14.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"
-  },
-  "prettier": "@portfolio-2025/prettier-config"
+  }
 }

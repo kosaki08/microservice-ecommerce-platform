@@ -26,8 +26,8 @@
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
     "@portfolio-2025/eslint-config": "workspace:^",
-    "@portfolio-2025/prettier-config": "workspace:^",
     "@portfolio-2025/typescript-config": "workspace:^",
     "eslint": "^9.19.0",
     "husky": "^9.1.7",
@@ -39,6 +39,5 @@
   "packageManager": "pnpm@10.2.1",
   "engines": {
     "node": ">=18"
-  },
-  "prettier": "@portfolio-2025/prettier-config"
+  }
 }

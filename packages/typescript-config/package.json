@@ -19,9 +19,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@portfolio-2025/prettier-config": "workspace:^"
-  },
-  "prettier": "@portfolio-2025/prettier-config"
+  }
 }

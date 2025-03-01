@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "@portfolio-2025/eslint-config": "workspace:^",
-    "@portfolio-2025/prettier-config": "workspace:^",
     "@portfolio-2025/typescript-config": "workspace:^",
     "@turbo/gen": "^2.4.0",
     "@types/node": "^22.13.0",
@@ -47,6 +46,5 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  },
-  "prettier": "@portfolio-2025/prettier-config"
+  }
 }
