@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --pretty --noEmit"
+    "type-check": "tsc --pretty --noEmit",
+    "clean": "rm -rf node_modules .turbo dist"
   },
   "dependencies": {
     "@portfolio-2025/ui": "workspace:^",

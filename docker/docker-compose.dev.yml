@@ -44,8 +44,11 @@ services:
       context: ../
       dockerfile: ./apps/rest-frontend/Dockerfile.dev
     volumes:
-      - ../apps/rest-frontend/src:/app/apps/rest-frontend/src
       - ../packages/ui:/app/packages/ui
+      - ../packages/typescript-config:/app/packages/typescript-config
+      - ../packages/eslint-config:/app/packages/eslint-config
+      - ../packages/prettier-config:/app/packages/prettier-config
+      - ../apps/rest-frontend:/app/apps/rest-frontend
       - /app/node_modules
     environment:
       - NODE_ENV=development

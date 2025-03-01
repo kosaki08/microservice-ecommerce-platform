@@ -7,6 +7,9 @@
   "types": "index.d.ts",
   "keywords": [],
   "author": "",
+  "scripts": {
+    "clean": "rm -rf node_modules .turbo"
+  },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1"
   }

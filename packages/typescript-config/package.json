@@ -2,6 +2,9 @@
   "name": "@portfolio-2025/typescript-config",
   "version": "0.0.0",
   "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf node_modules .turbo"
+  },
   "files": [
     "base.json",
     "nextjs.json",
