@@ -30,9 +30,11 @@
     "@portfolio-2025/eslint-config": "workspace:^",
     "@portfolio-2025/typescript-config": "workspace:^",
     "eslint": "^9.19.0",
+    "eslint-plugin-tailwindcss": "^3.18.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "turbo": "^2.4.4",
     "typescript": "5.7.3"
   },
