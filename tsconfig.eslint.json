@@ -1,0 +1,13 @@
+{
+  "extends": "@portfolio-2025/typescript-config/base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@portfolio-2025/*": ["./packages/*/src"],
+      "@app/*": ["./apps/*/src"]
+    }
+  },
+  "include": ["apps/**/*", "packages/**/*"],
+  "exclude": ["node_modules", "dist", "build"]
+}

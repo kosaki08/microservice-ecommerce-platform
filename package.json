@@ -12,8 +12,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix --max-warnings 0",
-      "prettier --write",
+      "eslint --fix --max-warnings 0 --parser-options=project:./tsconfig.eslint.json",
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
       "tsc --pretty --noEmit"
     ],
     "*.{json,md}": [

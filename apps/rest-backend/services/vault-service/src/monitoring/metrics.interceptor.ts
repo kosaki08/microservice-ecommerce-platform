@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nes
 import { Request } from "express";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import type { MetricsService } from "@/src/monitoring/metrics.service";
+import { MetricsService } from "@/src/monitoring/metrics.service";
 
 interface RouteInfo {
   path: string;

@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 import { Injectable, Logger } from "@nestjs/common";
-import type { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 import vault from "node-vault";
 import type { VaultConfig } from "@/src/config/vault.config";
 import {

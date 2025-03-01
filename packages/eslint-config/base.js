@@ -21,10 +21,18 @@ export const config = [
     },
     rules: {
       "turbo/no-undeclared-env-vars": "error",
-      "@typescript-eslint/no-unused-vars": ["error"],
+      "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/prefer-nullish-coalescing": "error",
       "@typescript-eslint/prefer-optional-chain": "error",
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          disallowTypeAnnotations: false,
+          fixStyle: "inline-type-imports",
+        },
+      ],
     },
   },
 ];

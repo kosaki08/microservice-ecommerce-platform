@@ -1,4 +1,4 @@
-import type { SecretsService, SecretData } from "@/src/secrets/secrets.service";
+import { SecretsService, SecretData } from "@/src/secrets/secrets.service";
 import { Controller, Get, Post, Param, Body, UseGuards, NotFoundException } from "@nestjs/common";
 import { JwtAuthGuard } from "@/src/auth/jwt-auth.guard";
 
