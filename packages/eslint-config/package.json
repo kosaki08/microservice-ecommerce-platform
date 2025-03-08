@@ -8,8 +8,8 @@
   },
   "exports": {
     "./base": "./base.js",
-    "./next-js": "./next.js",
-    "./react-internal": "./react-internal.js",
+    "./next": "./next.js",
+    "./react": "./react.js",
     "./nest": "./nest.js"
   },
   "types": "./index.d.ts",

@@ -1,5 +1,5 @@
 {
-  "extends": "@portfolio-2025/typescript-config/nestjs.json",
+  "extends": "@portfolio-2025/typescript-config/nest.json",
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",

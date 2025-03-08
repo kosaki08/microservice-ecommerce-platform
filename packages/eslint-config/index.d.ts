@@ -1,11 +1,11 @@
-declare module "@portfolio-2025/eslint-config/next-js" {
+declare module "@portfolio-2025/eslint-config/next" {
   namespace NextJsESLintConfig {
     const config: any;
   }
   export default NextJsESLintConfig.config;
 }
 
-declare module "@portfolio-2025/eslint-config/react-internal" {
+declare module "@portfolio-2025/eslint-config/react" {
   namespace ReactInternalESLintConfig {
     const config: any;
   }

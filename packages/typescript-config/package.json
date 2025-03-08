@@ -7,14 +7,14 @@
   },
   "files": [
     "base.json",
-    "nextjs.json",
+    "next.json",
     "nestjs.json",
     "react-library.json"
   ],
   "exports": {
     "./base.json": "./base.json",
-    "./nextjs.json": "./nextjs.json",
-    "./nestjs.json": "./nestjs.json",
+    "./next.json": "./next.json",
+    "./nest.json": "./nest.json",
     "./react-library.json": "./react-library.json"
   },
   "publishConfig": {

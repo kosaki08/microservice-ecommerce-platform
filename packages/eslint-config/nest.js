@@ -24,8 +24,6 @@ export const nestConfig = [
       ...pluginNest.configs.recommended.rules,
       "nestjs/use-dependency-injection": "error",
       "nestjs/use-validation-pipe": "error",
-      "@typescript-eslint/explicit-member-accessibility": ["error"],
-      "@typescript-eslint/explicit-function-return-type": ["error"],
     },
   },
   {

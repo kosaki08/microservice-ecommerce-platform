@@ -13,7 +13,6 @@ COPY pnpm-*.* ./
 COPY package.json turbo.json ./
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/*.json ./packages/typescript-config/
-COPY packages/prettier-config/package.json ./packages/prettier-config/
 COPY apps/rest-backend/services/vault-service/package.json ./apps/rest-backend/services/vault-service/
 
 # 依存関係をインストール

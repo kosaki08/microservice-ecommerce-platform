@@ -1,5 +1,5 @@
 {
-  "extends": "@portfolio-2025/typescript-config/nextjs.json",
+  "extends": "@portfolio-2025/typescript-config/next.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AppController } from "@/src/app.controller";
 import { AppService } from "@/src/app.service";
+import jwtConfig from "@/src/config/jwt.config";
 import vaultConfig from "@/src/config/vault.config";
 import { HealthModule } from "@/src/health/health.module";
 import { MonitoringModule } from "@/src/monitoring/monitoring.module";
@@ -10,7 +11,7 @@ import { SecretsModule } from "@/src/secrets/secrets.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [vaultConfig],
+      load: [vaultConfig, jwtConfig],
       isGlobal: true,
       envFilePath: [".env.local", ".env"],
       cache: true,
