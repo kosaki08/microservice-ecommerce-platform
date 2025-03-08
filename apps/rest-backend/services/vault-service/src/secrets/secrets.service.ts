@@ -1,6 +1,7 @@
 import { randomBytes } from "crypto";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { NetworkError } from "@portfolio-2025/shared-types";
 import vault from "node-vault";
 import type { VaultConfig } from "@/src/config/vault.config";
 import {
@@ -18,14 +19,6 @@ interface VaultResponse {
   data: {
     data: SecretData;
   };
-}
-
-interface VaultError extends Error {
-  response?: {
-    statusCode: number;
-    body?: unknown;
-  };
-  code?: string; // ネットワークエラーコード
 }
 
 @Injectable()
@@ -48,7 +41,17 @@ export class SecretsService {
     });
   }
 
-  private mapVaultError(error: VaultError, path?: string): Error {
+  private mapVaultError(error: NetworkError, path?: string): Error {
+    const errorContext = {
+      service: "vault",
+      operation: "VAULT_API",
+      path: path,
+      statusCode: error.response?.statusCode,
+      message: error.message,
+    };
+
+    this.logger.error(JSON.stringify(errorContext));
+
     if (error.response) {
       switch (error.response.statusCode) {
         case 401:
@@ -77,7 +80,7 @@ export class SecretsService {
       await this.client.write(`${this.config.secretMountPoint}/data/${path}`, { data });
       this.logger.log(`Secret written to path: ${path}`);
     } catch (error: unknown) {
-      const vaultError = error as VaultError;
+      const vaultError = error as NetworkError;
       this.logger.error(`Failed to write secret at ${path}: ${vaultError.message}`);
       throw this.mapVaultError(vaultError, path);
     }
@@ -89,7 +92,7 @@ export class SecretsService {
       this.logger.log(`Secret read from path: ${path}`);
       return result?.data?.data || null;
     } catch (error: unknown) {
-      const vaultError = error as VaultError;
+      const vaultError = error as NetworkError;
       this.logger.error(`Failed to read secret at ${path}: ${vaultError.message}`);
 
       if (vaultError.response?.statusCode === 404) {
@@ -106,7 +109,7 @@ export class SecretsService {
       await this.writeSecret(path, newSecret);
       this.logger.log(`Secret rotated at path: ${path}`);
     } catch (error: unknown) {
-      const vaultError = error as VaultError;
+      const vaultError = error as NetworkError;
       this.logger.error(`Failed to rotate secret at ${path}: ${vaultError.message}`);
       throw this.mapVaultError(vaultError, path);
     }

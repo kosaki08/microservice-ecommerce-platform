@@ -38,6 +38,7 @@
     "@nestjs/testing": "^10.0.0",
     "@portfolio-2025/eslint-config": "workspace:^",
     "@portfolio-2025/jest-config": "workspace:^",
+    "@portfolio-2025/shared-types": "workspace:^",
     "@portfolio-2025/typescript-config": "workspace:^",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.14",
