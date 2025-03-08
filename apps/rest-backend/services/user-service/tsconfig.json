@@ -8,6 +8,6 @@
       "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"]
     }
   },
-  "include": ["src/**/*", "test/**/*", "eslint.config.mjs"],
+  "include": ["src/**/*", "eslint.config.mjs"],
   "exclude": ["node_modules", "dist"]
 }

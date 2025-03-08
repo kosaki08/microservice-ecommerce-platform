@@ -10,7 +10,7 @@ import tseslint from "typescript-eslint";
  * */
 export const config = [
   {
-    ignores: ["eslint.config.mjs", "jest.config.js", "dist/**", "node_modules/**", ".turbo/**", "**/*.d.ts"],
+    ignores: ["eslint.config.mjs", "jest.config.mjs", "dist/**", "node_modules/**", ".turbo/**", "**/*.d.ts"],
   },
   js.configs.recommended,
   eslintConfigPrettier,

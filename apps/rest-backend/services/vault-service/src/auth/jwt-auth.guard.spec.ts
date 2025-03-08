@@ -18,7 +18,6 @@ describe("JwtAuthGuard", () => {
           useValue: {
             get: jest.fn().mockImplementation((key: string) => {
               if (key === "JWT_SECRET_KEY") return "test-secret";
-              if (key === "jwt.secret") return "test-secret";
               return undefined;
             }),
           },
