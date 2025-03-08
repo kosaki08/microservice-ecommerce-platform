@@ -12,7 +12,6 @@
     "./react": "./react.js",
     "./nest": "./nest.js"
   },
-  "types": "./index.d.ts",
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "@next/eslint-plugin-next": "^15.1.6",

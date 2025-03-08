@@ -15,8 +15,9 @@ import { JwtAuthGuard } from "@/src/auth/jwt-auth.guard";
       }),
       inject: [ConfigService],
     }),
+    ConfigModule,
   ],
   providers: [JwtAuthGuard],
-  exports: [JwtAuthGuard],
+  exports: [JwtAuthGuard, JwtModule],
 })
 export class AuthModule {}
