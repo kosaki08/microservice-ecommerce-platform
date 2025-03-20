@@ -52,6 +52,16 @@ export class SecretsService {
 
     this.logger.error(JSON.stringify(errorContext));
 
+    // 接続エラーの場合
+    if (
+      error.code === "ECONNREFUSED" ||
+      error.code === "ETIMEDOUT" ||
+      error.message.includes("Secret storage connection failed") ||
+      error.message.includes("Connection refused")
+    ) {
+      return new SecretConnectionException(error.message, error);
+    }
+
     if (error.response) {
       switch (error.response.statusCode) {
         case 401:
@@ -66,10 +76,6 @@ export class SecretsService {
         default:
           return new SecretServiceException(`Unexpected error: ${error.message}`, error);
       }
-    }
-
-    if (error.code === "ECONNREFUSED" || error.code === "ETIMEDOUT") {
-      return new SecretConnectionException("Connection failed", error);
     }
 
     return new SecretServiceException(`Unhandled error: ${error.message}`, error);

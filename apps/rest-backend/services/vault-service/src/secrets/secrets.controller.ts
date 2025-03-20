@@ -21,8 +21,18 @@ export class SecretsController {
     return secret;
   }
 
-  @Post("rotate/:path")
-  public async rotateSecret(@Param("path") path: string): Promise<void> {
-    await this.vaultService.rotateSecret(path);
+  @Get("api-keys")
+  public async getTestApiKeys(): Promise<SecretData | null> {
+    const path = "api-keys";
+    const secret = await this.vaultService.readSecret(path);
+    if (!secret) {
+      throw new NotFoundException(`Secret not found at path: ${path}`);
+    }
+    return secret;
+  }
+
+  @Post("rotate/api-keys")
+  public async rotateTestApiKeys(): Promise<void> {
+    await this.vaultService.rotateSecret("api-keys");
   }
 }
