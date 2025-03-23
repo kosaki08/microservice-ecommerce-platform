@@ -1,8 +1,7 @@
 {
   "name": "@portfolio-2025/eslint-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
   "scripts": {
     "clean": "rm -rf node_modules .turbo"
   },
