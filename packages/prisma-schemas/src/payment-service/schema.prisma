@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PAYMENT_DB_URL")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  CONVENIENCE_STORE
+  DIGITAL_WALLET
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum RefundStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Transaction {
+  id                 String            @id @default(uuid())
+  order_id           String
+  payment_method     PaymentMethod
+  amount             Decimal           @db.Decimal(10, 0)
+  currency           String            @default("JPY")
+  status             TransactionStatus
+  provider           String
+  provider_reference String?
+  error_message      String?
+  retry_count        Int               @default(0)
+  metadata           Json?             @db.JsonB
+  processed_at       DateTime?
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+
+  refund Refund[]
+
+  @@index([order_id])
+  @@index([payment_method])
+  @@index([status, created_at])
+}
+
+model Refund {
+  id                 String       @id @default(uuid())
+  transaction_id     String
+  amount             Decimal      @db.Decimal(10, 0)
+  reason             String
+  status             RefundStatus
+  provider_reference String?
+  metadata           Json?        @db.JsonB
+  processed_at       DateTime?
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @updatedAt
+
+  transaction Transaction @relation(fields: [transaction_id], references: [id])
+
+  @@index([transaction_id])
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@portfolio-2025/prisma-schemas",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "pnpm build:ts && pnpm generate",
+    "build:ts": "tsc",
+    "generate": "pnpm generate:user && pnpm generate:product && pnpm generate:order && pnpm generate:payment",
+    "generate:user": "cd src/user-service && npx prisma generate",
+    "generate:product": "cd src/product-service && npx prisma generate",
+    "generate:order": "cd src/order-service && npx prisma generate",
+    "generate:payment": "cd src/payment-service && npx prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.11.0"
+  },
+  "devDependencies": {
+    "@portfolio-2025/typescript-config": "workspace:^",
+    "prisma": "^5.11.0",
+    "typescript": "^5.4.2"
+  }
+}
