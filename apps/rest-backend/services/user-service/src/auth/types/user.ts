@@ -1,6 +1,6 @@
-export interface User {
-  id: string;
-  email: string;
+import { type Account } from "@prisma/client";
+
+export type User = Pick<Account, "id" | "email"> & {
   firstName: string;
   lastName: string;
-}
+};
