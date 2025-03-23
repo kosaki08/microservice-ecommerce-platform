@@ -1,4 +1,4 @@
-import { type Account } from "@prisma/client";
+import type { Account } from "@prisma/client";
 
 export type User = Pick<Account, "id" | "email"> & {
   firstName: string;

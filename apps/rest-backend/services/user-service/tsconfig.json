@@ -5,7 +5,9 @@
     "outDir": "dist",
     "paths": {
       "@/*": ["./*"],
-      "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"]
+      "@portfolio-2025/eslint-config/*": ["../../../packages/eslint-config/*"],
+      "@portfolio-2025/shared": ["../../../packages/shared/src"],
+      "@portfolio-2025/shared/*": ["../../../packages/shared/src/*"]
     }
   },
   "include": ["src/**/*", "eslint.config.mjs"],

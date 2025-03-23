@@ -7,6 +7,7 @@ import appConfig from "@/src/config/app.config";
 import { HealthModule } from "@/src/health/health.module";
 import { MonitoringModule } from "@/src/monitoring/monitoring.module";
 import { PrismaModule } from "@/src/prisma/prisma.module";
+import { UsersModule } from "@/src/users/users.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaModule } from "@/src/prisma/prisma.module";
       envFilePath: [".env.local", ".env"],
     }),
     PrismaModule,
+    UsersModule,
     AuthModule,
     MonitoringModule,
     HealthModule,
