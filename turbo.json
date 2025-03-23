@@ -1,7 +1,20 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["NODE_ENV", "VAULT_ADDR", "VAULT_TOKEN", "VAULT_SECRET_MOUNT", "VAULT_API_VERSION", "JWT_SECRET_KEY", "JWT_EXPIRES_IN"],
+  "globalEnv": [
+    "NODE_ENV",
+    "VAULT_ADDR",
+    "VAULT_TOKEN",
+    "VAULT_SECRET_MOUNT",
+    "VAULT_API_VERSION",
+    "JWT_SECRET_KEY",
+    "JWT_EXPIRES_IN",
+    "JWT_REFRESH_SECRET_KEY",
+    "JWT_REFRESH_EXPIRES_IN",
+    "USER_SERVICE_HOST",
+    "USER_SERVICE_PORT",
+    "USER_SERVICE_HTTP_PORT"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
