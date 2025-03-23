@@ -39,6 +39,26 @@ services:
       - postgres
       - redis
 
+  gateway:
+    build:
+      context: ../
+      dockerfile: ./apps/rest-backend/gateway/Dockerfile.dev
+      args:
+        ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
+    volumes:
+      - ../:/app
+      - /app/node_modules
+    environment:
+      - NEST_DEBUG=true
+      - NODE_ENV=development
+      - VAULT_SERVICE_URL=http://vault-service:3010
+      - USER_SERVICE_URL=http://user-service:3001
+      - ORDER_SERVICE_URL=http://order-service:3002
+      - PAYMENT_SERVICE_URL=http://payment-service:3003
+      - PRODUCT_SERVICE_URL=http://product-service:3004
+      - GATEWAY_URL=http://gateway:3000
+      - LOG_LEVEL=debug
+
   rest-frontend:
     build:
       context: ../
@@ -64,7 +84,7 @@ services:
       # - order-service
       # - payment-service
       # - product-service
-      # - gateway
+      - gateway
     networks:
       - monitoring
       - backend

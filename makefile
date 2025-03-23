@@ -1,6 +1,6 @@
 # 環境変数の定義
 COMPOSE_FILES := -f docker/docker-compose.base.yml -f docker/docker-compose.dev.yml
-SERVICES := vault-service user-service rest-frontend postgres redis
+SERVICES := vault-service user-service gateway rest-frontend postgres redis
 
 .PHONY: $(SERVICES) up build down exec restart logs install-deps prisma-migrate prisma-generate prisma-studio help
 

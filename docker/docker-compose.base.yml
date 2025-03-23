@@ -26,19 +26,28 @@ services:
       - postgres
       - redis
 
+  gateway:
+    ports:
+      - "3000:3000"
+    depends_on:
+      - vault-service
+      - user-service
+    networks:
+      - backend
+
   rest-frontend:
     build:
       context: ../
       dockerfile: ./apps/rest-frontend/Dockerfile
     ports:
-      - "3000:3000"
+      - "3005:3000"
     depends_on:
       - vault-service
       - user-service
       # - order-service
       # - payment-service
       # - product-service
-      # - gateway
+      - gateway
     networks:
       - monitoring
       - backend

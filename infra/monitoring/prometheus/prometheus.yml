@@ -34,10 +34,10 @@ scrape_configs:
   #     - targets: ["product-service:3004"]
   #   metrics_path: "/metrics"
 
-  # - job_name: "gateway"
-  #   static_configs:
-  #     - targets: ["gateway:3000"]
-  #   metrics_path: "/metrics"
+  - job_name: "gateway"
+    static_configs:
+      - targets: ["gateway:3000"]
+    metrics_path: "/metrics"
 
   - job_name: "prometheus"
     static_configs:
