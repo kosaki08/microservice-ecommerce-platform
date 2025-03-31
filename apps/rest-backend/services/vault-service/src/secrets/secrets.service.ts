@@ -1,7 +1,7 @@
 import { randomBytes } from "crypto";
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { NetworkError } from "@portfolio-2025/shared-types";
+import { NetworkError } from "@portfolio-2025/shared";
 import vault from "node-vault";
 import type { VaultConfig } from "@/src/config/vault.config";
 import {

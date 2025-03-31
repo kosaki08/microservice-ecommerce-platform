@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { type NetworkError } from "@portfolio-2025/shared-types";
+import type { NetworkError } from "@portfolio-2025/shared";
 import { SecretAuthenticationException, SecretConnectionException } from "@/src/secrets/secrets.exception";
 import { SecretsService, type SecretData } from "@/src/secrets/secrets.service";
 

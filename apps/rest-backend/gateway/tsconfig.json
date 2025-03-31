@@ -6,7 +6,7 @@
     "paths": {
       "@/*": ["./*"],
       "@portfolio-2025/eslint-config/*": ["../../packages/eslint-config/*"],
-      "@portfolio-2025/shared-types/*": ["../../packages/shared-types/*"]
+      "@portfolio-2025/shared/*": ["../../packages/shared/*"]
     }
   },
   "include": ["src/**/*", "eslint.config.mjs"],

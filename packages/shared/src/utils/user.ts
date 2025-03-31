@@ -1,5 +1,5 @@
 import type { Account, Profile } from "@portfolio-2025/prisma-schemas/user-service";
-import type { User } from "../types/user";
+import type { User } from "@/types";
 
 export const mapToUser = (account: Account, profile: Profile): User => {
   return {

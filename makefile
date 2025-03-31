@@ -39,12 +39,18 @@ logs: ## ログの表示
 	@docker compose $(COMPOSE_FILES) logs -f --tail=100 $(service)
 
 # 開発支援
-install-deps: ## 依存パッケージのインストール
+install-deps: ## 依存パッケージのインストール (例: make install-deps service=gateway pkg=axios)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm add $(pkg) --filter @portfolio-2025/$(service)
 
 # Prisma関連
-prisma-%: ## Prisma操作（migrate/generate/studio）
+prisma-migrate: ## Prisma マイグレーション実行 (例: make prisma-migrate service=user-service)
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run migrate:$(service) # package.json側のスクリプト名も合わせる必要あり
+
+prisma-generate: ## Prisma クライアント生成 (例: make prisma-generate service=user-service)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run generate:$(service)
+
+prisma-studio: ## Prisma Studio 起動 (例: make prisma-studio service=user-service)
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run studio:$(service) # package.json側のスクリプト名も合わせる必要あり
 
 # ヘルプ
 help: ## コマンド一覧表示
