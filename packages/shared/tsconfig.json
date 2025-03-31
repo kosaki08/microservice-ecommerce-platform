@@ -14,5 +14,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "../shared-types/src/errors/network-error.ts"]
+  "include": ["src/**/*", "../shared-types/src/errors/network-error.ts"],
+  "exclude": ["node_modules", "dist"],
+  "references": [{ "path": "../prisma-schemas" }]
 }

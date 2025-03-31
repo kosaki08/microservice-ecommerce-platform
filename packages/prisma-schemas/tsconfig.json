@@ -1,8 +1,19 @@
 {
   "extends": "@portfolio-2025/typescript-config/base.json",
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@prisma-client/user-service": ["./src/user-service/generated/client"],
+      "@prisma-client/product-service": ["./src/product-service/generated/client"],
+      "@prisma-client/order-service": ["./src/order-service/generated/client"],
+      "@prisma-client/payment-service": ["./src/payment-service/generated/client"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

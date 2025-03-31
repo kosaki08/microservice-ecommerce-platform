@@ -1,13 +1,14 @@
-node_modules
-.next
-dist
-build
-.turbo
-*.log
-.env
+# 共通除外設定
+**/node_modules
+**/dist
+**/build
+**/.turbo
+**/*.log
+**/.env
 Dockerfile*
 docker-compose*.yml
 
+# ビルド成果物の許可
 !/apps/rest-backend/services/**/dist
 !/apps/rest-backend/services/**/node_modules
 !/apps/rest-backend/services/**/.next

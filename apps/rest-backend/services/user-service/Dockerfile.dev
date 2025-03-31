@@ -8,6 +8,24 @@ RUN apk add --no-cache git openssh-client && \
   corepack enable && \
   corepack prepare pnpm@latest --activate
 
+# ワークスペース定義とルートの package.json をコピー
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# 各パッケージ/アプリの package.json をコピー
+COPY packages/prisma-schemas/package.json ./packages/prisma-schemas/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/shared-types/package.json ./packages/shared-types/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+COPY packages/typescript-config/package.json ./packages/typescript-config/
+COPY packages/jest-config/package.json ./packages/jest-config/
+
+# 依存関係をインストール
+RUN pnpm install --frozen-lockfile
+
+# プロジェクト全体のソースコードをコピー
+COPY . .
+
 # 開発用のエントリーポイントをコピー
 COPY ./docker/entrypoints/entrypoint-dev.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint-dev.sh

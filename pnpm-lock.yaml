@@ -157,7 +157,7 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       typescript:
-        specifier: ^5.1.3
+        specifier: 5.7.3
         version: 5.7.3
 
   apps/rest-backend/services/user-service:
@@ -177,9 +177,12 @@ importers:
       '@nestjs/platform-express':
         specifier: ^10.0.0
         version: 10.4.15(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)
-      '@prisma/client':
-        specifier: ^6.5.0
-        version: 6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
+      '@portfolio-2025/prisma-schemas':
+        specifier: workspace:^
+        version: link:../../../../packages/prisma-schemas
+      '@portfolio-2025/shared':
+        specifier: workspace:^
+        version: link:../../../../packages/shared
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -214,12 +217,6 @@ importers:
       '@portfolio-2025/jest-config':
         specifier: workspace:^
         version: link:../../../../packages/jest-config
-      '@portfolio-2025/prisma-schemas':
-        specifier: workspace:^
-        version: link:../../../../packages/prisma-schemas
-      '@portfolio-2025/shared':
-        specifier: workspace:^
-        version: link:../../../../packages/shared
       '@portfolio-2025/typescript-config':
         specifier: workspace:^
         version: link:../../../../packages/typescript-config
@@ -278,7 +275,7 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       typescript:
-        specifier: ^5.1.3
+        specifier: 5.7.3
         version: 5.7.3
 
   apps/rest-backend/services/vault-service:
@@ -384,7 +381,7 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       typescript:
-        specifier: ^5.1.3
+        specifier: 5.7.3
         version: 5.7.3
 
   apps/rest-frontend:
@@ -451,7 +448,7 @@ importers:
         specifier: ^29.1.0
         version: 29.2.5(@babel/core@7.26.8)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.8))(esbuild@0.25.1)(jest@29.7.0(@types/node@20.17.17)(ts-node@10.9.2(@types/node@20.17.17)(typescript@5.7.3)))(typescript@5.7.3)
       typescript:
-        specifier: ^5
+        specifier: 5.7.3
         version: 5.7.3
 
   packages/eslint-config:
@@ -502,30 +499,30 @@ importers:
         specifier: ^29.1.2
         version: 29.2.5(@babel/core@7.26.8)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.8))(jest@29.7.0(@types/node@22.13.0)(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))(typescript@5.7.3)
       typescript:
-        specifier: ^5.0.0
+        specifier: 5.7.3
         version: 5.7.3
 
   packages/prisma-schemas:
     dependencies:
       '@prisma/client':
-        specifier: ^5.11.0
+        specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
     devDependencies:
       '@portfolio-2025/typescript-config':
         specifier: workspace:^
         version: link:../typescript-config
       prisma:
-        specifier: ^5.11.0
+        specifier: ^5.22.0
         version: 5.22.0
       typescript:
-        specifier: ^5.4.2
+        specifier: 5.7.3
         version: 5.7.3
 
   packages/shared:
     dependencies:
-      '@prisma/client':
-        specifier: ^6.5.0
-        version: 6.5.0(prisma@6.5.0(typescript@5.7.3))(typescript@5.7.3)
+      '@portfolio-2025/prisma-schemas':
+        specifier: workspace:^
+        version: link:../prisma-schemas
     devDependencies:
       '@portfolio-2025/eslint-config':
         specifier: workspace:^
@@ -534,7 +531,7 @@ importers:
         specifier: workspace:^
         version: link:../typescript-config
       typescript:
-        specifier: ^5.1.3
+        specifier: 5.7.3
         version: 5.7.3
 
   packages/shared-types: {}
@@ -6888,6 +6885,7 @@ snapshots:
     optionalDependencies:
       prisma: 6.5.0(typescript@5.7.3)
       typescript: 5.7.3
+    optional: true
 
   '@prisma/config@6.5.0':
     dependencies:
@@ -8470,7 +8468,7 @@ snapshots:
       eslint: 9.19.0(jiti@2.4.2)
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2))
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0)(eslint@9.19.0(jiti@2.4.2))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.19.0(jiti@2.4.2))
       eslint-plugin-react: 7.37.4(eslint@9.19.0(jiti@2.4.2))
       eslint-plugin-react-hooks: 5.1.0(eslint@9.19.0(jiti@2.4.2))
@@ -8505,7 +8503,7 @@ snapshots:
       is-glob: 4.0.3
       stable-hash: 0.0.4
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0)(eslint@9.19.0(jiti@2.4.2))
     transitivePeerDependencies:
       - supports-color
 
@@ -8520,7 +8518,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2)))(eslint@9.19.0(jiti@2.4.2)):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.23.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.7.3))(eslint-import-resolver-typescript@3.7.0)(eslint@9.19.0(jiti@2.4.2)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8

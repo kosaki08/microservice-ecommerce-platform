@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "pnpm run build",
     "build": "pnpm build:ts && pnpm generate",
     "build:ts": "tsc",
     "generate": "pnpm generate:user && pnpm generate:product && pnpm generate:order && pnpm generate:payment",
@@ -13,12 +14,40 @@
     "generate:order": "cd src/order-service && npx prisma generate",
     "generate:payment": "cd src/payment-service && npx prisma generate"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    },
+    "./user-service": {
+      "types": "./dist/user-service/index.d.ts",
+      "require": "./dist/user-service/index.js",
+      "import": "./dist/user-service/index.js"
+    },
+    "./product-service": {
+      "types": "./dist/product-service/index.d.ts",
+      "require": "./dist/product-service/index.js",
+      "import": "./dist/product-service/index.js"
+    },
+    "./order-service": {
+      "types": "./dist/order-service/index.d.ts",
+      "require": "./dist/order-service/index.js",
+      "import": "./dist/order-service/index.js"
+    },
+    "./payment-service": {
+      "types": "./dist/payment-service/index.d.ts",
+      "require": "./dist/payment-service/index.js",
+      "import": "./dist/payment-service/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "dependencies": {
-    "@prisma/client": "^5.11.0"
+    "@prisma/client": "^5.22.0"
   },
   "devDependencies": {
     "@portfolio-2025/typescript-config": "workspace:^",
-    "prisma": "^5.11.0",
-    "typescript": "^5.4.2"
+    "prisma": "^5.22.0",
+    "typescript": "5.7.3"
   }
 }

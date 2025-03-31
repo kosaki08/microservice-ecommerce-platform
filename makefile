@@ -1,21 +1,25 @@
 # 環境変数の定義
 COMPOSE_FILES := -f docker/docker-compose.base.yml -f docker/docker-compose.dev.yml
 SERVICES := vault-service user-service gateway rest-frontend postgres redis
+COMPOSE_WATCH := --watch
 
 .PHONY: $(SERVICES) up build down exec restart logs install-deps prisma-migrate prisma-generate prisma-studio help
 
 # 基本コマンド
 up: ## 全サービス起動（開発環境）
-	@DOCKER_BUILDKIT=1 docker compose $(COMPOSE_FILES) up --build
+	docker compose $(COMPOSE_FILES) up $(COMPOSE_WATCH)
+
+up-build: ## ビルドして起動
+	docker compose $(COMPOSE_FILES) up --build $(COMPOSE_WATCH)
 
 up-debug: ## debug profile付きで起動
-	@DOCKER_BUILDKIT=1 docker compose $(COMPOSE_FILES) --profile debug up --build
+	docker compose $(COMPOSE_FILES) --profile debug up --build $(COMPOSE_WATCH)
 
 up-monitoring: ## monitoring profile付きで起動
-	@DOCKER_BUILDKIT=1 docker compose $(COMPOSE_FILES) --profile monitoring up --build
+	docker compose $(COMPOSE_FILES) --profile monitoring up --build $(COMPOSE_WATCH)
 
 build: ## 全サービスのビルド
-	@DOCKER_BUILDKIT=1 docker compose $(COMPOSE_FILES) build --parallel
+	docker compose $(COMPOSE_FILES) build --parallel
 
 down: ## 全サービス停止
 	@docker compose $(COMPOSE_FILES) down --volumes --remove-orphans --timeout 0
@@ -40,7 +44,7 @@ install-deps: ## 依存パッケージのインストール
 
 # Prisma関連
 prisma-%: ## Prisma操作（migrate/generate/studio）
-	@docker compose $(COMPOSE_FILES) exec $(service) npx prisma $(subst prisma-,,$@)
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run generate:$(service)
 
 # ヘルプ
 help: ## コマンド一覧表示

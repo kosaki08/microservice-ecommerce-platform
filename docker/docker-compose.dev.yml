@@ -2,6 +2,7 @@ services:
   vault:
     container_name: vault-dev
     environment:
+      - VAULT_API_ADDR=http://vault-dev:8200
       - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
     command: server -dev -dev-listen-address=0.0.0.0:8200 -config=/vault/config/vault-config.hcl
     volumes:
@@ -13,8 +14,25 @@ services:
       dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile.dev
       args:
         ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3010/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/rest-backend/services/vault-service
+          target: /app/apps/rest-backend/services/vault-service
+        - action: rebuild
+          path: ./packages/shared
+        - action: rebuild
+          path: ./packages/typescript-config
+        - action: sync
+          path: ./packages/eslint-config
+          target: /app/packages/eslint-config
     volumes:
-      - ../:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -28,11 +46,23 @@ services:
       dockerfile: ./apps/rest-backend/services/user-service/Dockerfile.dev
       args:
         ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/rest-backend/services/user-service
+          target: /app/apps/rest-backend/services/user-service
+        - action: rebuild
+          path: ./packages/shared
     ports:
       - "3001:3001"
       - "3051:3051"
     volumes:
-      - ../:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -40,6 +70,7 @@ services:
       - USER_SERVICE_PORT=3051
       - USER_SERVICE_HTTP_PORT=3001
       - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
+      - USER_DB_URL=postgresql://user:password@postgres:5432/ecommerce
       - REDIS_URL=redis://redis:6379
     depends_on:
       - postgres
@@ -51,8 +82,17 @@ services:
       dockerfile: ./apps/rest-backend/gateway/Dockerfile.dev
       args:
         ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
+    develop:
+      watch:
+        - path: ./apps/rest-backend/gateway
+          action: sync+restart
+          target: /app/apps/rest-backend/gateway
+    depends_on:
+      vault-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
     volumes:
-      - ../:/app
       - /app/node_modules
     environment:
       - USER_SERVICE_HOST=user-service
@@ -75,6 +115,14 @@ services:
     build:
       context: ../
       dockerfile: ./apps/rest-frontend/Dockerfile.dev
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/rest-frontend
+          target: /app/apps/rest-frontend
+        - action: sync
+          path: ./packages/ui
+          target: /app/packages/ui
     volumes:
       - ../packages/ui:/app/packages/ui
       - ../packages/typescript-config:/app/packages/typescript-config
