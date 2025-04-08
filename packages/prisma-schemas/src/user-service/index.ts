@@ -1,1 +1,2 @@
-export * from "@prisma-client/user-service";
+export * from "./generated/client";
+export { Prisma } from "./generated/client";

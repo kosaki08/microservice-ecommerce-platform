@@ -1,16 +1,41 @@
-# 共通除外設定
-**/node_modules
-**/dist
-**/build
-**/.turbo
-**/*.log
-**/.env
-Dockerfile*
-docker-compose*.yml
+# Git
+.git
 
-# ビルド成果物の許可
-!/apps/rest-backend/services/**/dist
-!/apps/rest-backend/services/**/node_modules
-!/apps/rest-backend/services/**/.next
-!/apps/rest-backend/services/**/build
-!/apps/rest-backend/services/**/.turbo
+# Node modules
+node_modules
+packages/**/node_modules
+apps/**/node_modules
+
+# Build outputs / Caches
+dist
+packages/**/dist
+apps/**/dist
+.turbo
+packages/**/.turbo
+apps/**/.turbo
+*.tsbuildinfo
+packages/**/*.tsbuildinfo
+apps/**/*.tsbuildinfo
+
+# Logs
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env*
+!.env.example
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode
+.idea
+
+# Other
+coverage

@@ -28,7 +28,8 @@
     "type-check": {
       "dependsOn": ["^type-check"],
       "outputs": [],
-      "inputs": ["apps/**/src/**/*.{ts,tsx}", "packages/ui/**/*.{ts,tsx}"]
+      "inputs": ["apps/**/src/**/*.{ts,tsx}", "packages/ui/**/*.{ts,tsx}"],
+      "cache": false
     },
     "dev": {
       "cache": false,
@@ -36,7 +37,7 @@
     },
     "clean": {
       "cache": false,
-      "persistent": true
+      "persistent": false
     }
   }
 }

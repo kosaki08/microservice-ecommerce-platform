@@ -22,18 +22,16 @@ services:
       start_period: 30s
     develop:
       watch:
-        - action: sync
+        - action: sync # vault-service のソース同期
           path: ./apps/rest-backend/services/vault-service
           target: /app/apps/rest-backend/services/vault-service
-        - action: rebuild
+        - action: rebuild # shared パッケージ変更時は再ビルド
           path: ./packages/shared
-        - action: rebuild
+        - action: rebuild # typescript-config 変更時も再ビルド
           path: ./packages/typescript-config
-        - action: sync
+        - action: sync # eslint-config は同期のみ
           path: ./packages/eslint-config
           target: /app/packages/eslint-config
-    volumes:
-      - /app/node_modules
     environment:
       - NODE_ENV=development
       - VAULT_ADDR=http://vault-dev:8200
@@ -54,16 +52,17 @@ services:
       start_period: 30s
     develop:
       watch:
-        - action: sync
+        - action: sync+restart # user-service のソース変更時は同期して再起動
           path: ./apps/rest-backend/services/user-service
           target: /app/apps/rest-backend/services/user-service
-        - action: rebuild
+        - action: rebuild # shared パッケージ変更時は再ビルド
           path: ./packages/shared
     ports:
       - "3001:3001"
       - "3051:3051"
-    volumes:
-      - /app/node_modules
+    volumes: # ソースコードは develop.watch で同期
+      - ../packages/prisma-schemas:/app/packages/prisma-schemas # prisma はマウント
+      - ../packages/shared:/app/packages/shared # shared はマウント
     environment:
       - NODE_ENV=development
       - USER_SERVICE_HOST=user-service
@@ -84,16 +83,16 @@ services:
         ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
     develop:
       watch:
-        - path: ./apps/rest-backend/gateway
+        - path: ./apps/rest-backend/gateway # gateway ソース変更時は同期して再起動
           action: sync+restart
           target: /app/apps/rest-backend/gateway
+        - action: rebuild # shared パッケージ変更時は再ビルド
+          path: ./packages/shared
     depends_on:
       vault-service:
         condition: service_healthy
       user-service:
         condition: service_healthy
-    volumes:
-      - /app/node_modules
     environment:
       - USER_SERVICE_HOST=user-service
       - USER_SERVICE_PORT=3051
@@ -117,19 +116,18 @@ services:
       dockerfile: ./apps/rest-frontend/Dockerfile.dev
     develop:
       watch:
-        - action: sync
+        - action: sync # frontend ソースは同期のみ
           path: ./apps/rest-frontend
           target: /app/apps/rest-frontend
-        - action: sync
+        - action: sync # ui パッケージも同期のみ
           path: ./packages/ui
           target: /app/packages/ui
+        - action: rebuild # typescript-config 変更時は再ビルド
+          path: ./packages/typescript-config
     volumes:
-      - ../packages/ui:/app/packages/ui
       - ../packages/typescript-config:/app/packages/typescript-config
       - ../packages/eslint-config:/app/packages/eslint-config
       - ../packages/prettier-config:/app/packages/prettier-config
-      - ../apps/rest-frontend:/app/apps/rest-frontend
-      - /app/node_modules
     environment:
       - NODE_ENV=development
       - VAULT_SERVICE_URL=http://vault-service:3010
@@ -140,7 +138,7 @@ services:
       - GATEWAY_URL=http://gateway:3000
     depends_on:
       - vault-service
-      - user-service
+      - user-service # user-service の healthcheck を使うため依存関係に含める
       # - order-service
       # - payment-service
       # - product-service

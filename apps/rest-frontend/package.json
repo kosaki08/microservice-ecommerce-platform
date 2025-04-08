@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --pretty --noEmit",
-    "clean": "rm -rf node_modules .turbo dist",
+    "clean": "rm -rf node_modules tsconfig.tsbuildinfo .turbo dist .next",
     "test": "jest",
     "test:watch": "jest --watch"
   },

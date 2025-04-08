@@ -21,6 +21,8 @@ services:
       - ROTATION_SCHEDULE=0 0 * * *
     depends_on:
       - vault
+    volumes:
+      - ../packages/prisma-schemas:/app/packages/prisma-schemas
     networks:
       - backend
 
@@ -31,6 +33,9 @@ services:
     depends_on:
       - postgres
       - redis
+    volumes:
+      - ../packages/prisma-schemas:/app/packages/prisma-schemas
+      - ../packages/shared:/app/packages/shared
     networks:
       - backend
 

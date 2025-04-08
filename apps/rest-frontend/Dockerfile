@@ -1,12 +1,12 @@
 # Stage 1: Builder
-FROM node:18-alpine AS builder
+FROM node:20-alpine3.20 AS builder
 
 WORKDIR /app
 
 # pnpmのインストール
 RUN npm install -g corepack@latest && \
   corepack enable && \
-  corepack prepare pnpm@latest --activate
+  corepack prepare pnpm@10.6.4 --activate
 
 # 依存関係ファイルのコピー
 COPY pnpm-*.* ./
