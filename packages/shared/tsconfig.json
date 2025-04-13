@@ -13,10 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@portfolio-2025/prisma-schemas/user-service": ["../prisma-schemas/src/user-service/generated/client"],
-      "@portfolio-2025/prisma-schemas/product-service": ["../prisma-schemas/src/product-service/generated/client"],
-      "@portfolio-2025/prisma-schemas/order-service": ["../prisma-schemas/src/order-service/generated/client"],
-      "@portfolio-2025/prisma-schemas/payment-service": ["../prisma-schemas/src/payment-service/generated/client"]
+      "@portfolio-2025/prisma-schemas": ["../prisma-schemas/src/generated/client"]
     }
   },
   "include": ["src/**/*"],

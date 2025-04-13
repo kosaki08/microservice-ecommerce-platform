@@ -7,13 +7,7 @@
     "incremental": true,
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": ".",
-    "paths": {
-      "@prisma-client/user-service": ["./src/user-service/generated/client"],
-      "@prisma-client/product-service": ["./src/product-service/generated/client"],
-      "@prisma-client/order-service": ["./src/order-service/generated/client"],
-      "@prisma-client/payment-service": ["./src/payment-service/generated/client"]
-    }
+    "baseUrl": "."
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/generated/**"]

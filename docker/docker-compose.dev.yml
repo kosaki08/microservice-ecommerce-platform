@@ -13,7 +13,7 @@ services:
       start_period: 30s
     develop:
       watch:
-        - action: sync+restart
+        - action: sync
           path: ./apps/backend
           target: /app/apps/backend
         - action: rebuild
@@ -32,10 +32,6 @@ services:
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
-      - USER_DB_URL=postgresql://user:password@postgres:5432/ecommerce
-      - PRODUCT_DB_URL=postgresql://user:password@postgres:5432/ecommerce
-      - ORDER_DB_URL=postgresql://user:password@postgres:5432/ecommerce
-      - PAYMENT_DB_URL=postgresql://user:password@postgres:5432/ecommerce
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET_KEY=dev_jwt_secret_for_testing
       - JWT_EXPIRES_IN=1h
@@ -44,10 +40,10 @@ services:
       - LOG_LEVEL=debug
       - APP_HTTP_PORT=8080
     depends_on:
-      postgres:
-        condition: service_started
-      redis:
-        condition: service_started
+      - postgres
+      # condition: service_healthy
+      # redis:
+      #   condition: service_started
 
   frontend:
     build:
@@ -71,10 +67,16 @@ services:
       - NODE_ENV=development
       - NEXT_PUBLIC_API_URL=http://backend:3000
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
+      # condition: service_healthy
 
   postgres:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password

@@ -10,29 +10,13 @@
     "postbuild": "cpx 'src/**/generated/**/*' dist",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "type-check": "tsc --pretty --noEmit",
-    "clean": "rm -rf node_modules dist generated tsconfig.tsbuildinfo",
-    "generate": "pnpm -r --filter=@portfolio-2025/prisma-schemas generate",
-    "generate:user": "cd src/user-service && npx prisma generate",
-    "generate:product": "cd src/product-service && npx prisma generate",
-    "generate:order": "cd src/order-service && npx prisma generate",
-    "generate:payment": "cd src/payment-service && npx prisma generate"
+    "clean": "rm -rf node_modules dist generated src/generated tsconfig.tsbuildinfo",
+    "generate": "prisma generate --schema ./src/schema.prisma"
   },
   "exports": {
-    "./user-service": {
-      "types": "./dist/user-service/index.d.ts",
-      "default": "./dist/user-service/index.js"
-    },
-    "./product-service": {
-      "types": "./dist/product-service/index.d.ts",
-      "default": "./dist/product-service/index.js"
-    },
-    "./order-service": {
-      "types": "./dist/order-service/index.d.ts",
-      "default": "./dist/order-service/index.js"
-    },
-    "./payment-service": {
-      "types": "./dist/payment-service/index.d.ts",
-      "default": "./dist/payment-service/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "dependencies": {
