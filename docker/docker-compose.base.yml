@@ -6,15 +6,6 @@ services:
       dockerfile: ./apps/backend/Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ../infra/secrets/vault/policies:/vault/policies
-      - ../infra/secrets/vault/scripts:/vault/scripts
-    cap_add:
-      - IPC_LOCK
-    environment:
-      - VAULT_ADDR=http://vault:8200
-      - AUTH_TOKEN_TTL=1h
-      - ROTATION_SCHEDULE=0 0 * * *
     networks:
       - backend
       - monitoring
