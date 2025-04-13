@@ -1,68 +1,33 @@
 services:
-  vault:
-    image: vault:1.13.3
+  backend:
+    container_name: backend
+    build:
+      context: ../
+      dockerfile: ./apps/backend/Dockerfile
     ports:
-      - "8200:8200"
+      - "8080:8080"
     volumes:
       - ../infra/secrets/vault/policies:/vault/policies
       - ../infra/secrets/vault/scripts:/vault/scripts
     cap_add:
       - IPC_LOCK
-    networks:
-      - backend
-
-  vault-service:
-    container_name: vault-service
-    ports:
-      - "3010:3010"
     environment:
       - VAULT_ADDR=http://vault:8200
       - AUTH_TOKEN_TTL=1h
       - ROTATION_SCHEDULE=0 0 * * *
-    depends_on:
-      - vault
-    volumes:
-      - ../packages/prisma-schemas:/app/packages/prisma-schemas
     networks:
       - backend
+      - monitoring
 
-  user-service:
-    container_name: user-service
-    ports:
-      - "3001:3001"
-    depends_on:
-      - postgres
-      - redis
-    volumes:
-      - ../packages/prisma-schemas:/app/packages/prisma-schemas
-      - ../packages/shared:/app/packages/shared
-    networks:
-      - backend
-
-  gateway:
-    container_name: gateway
+  frontend:
+    container_name: frontend
+    build:
+      context: ../
+      dockerfile: ./apps/frontend/Dockerfile
     ports:
       - "3000:3000"
     depends_on:
-      - vault-service
-      - user-service
-    networks:
       - backend
-
-  rest-frontend:
-    container_name: rest-frontend
-    build:
-      context: ../
-      dockerfile: ./apps/rest-frontend/Dockerfile
-    ports:
-      - "3005:3000"
-    depends_on:
-      - vault-service
-      - user-service
-      # - order-service
-      # - payment-service
-      # - product-service
-      - gateway
     networks:
       - monitoring
       - backend
@@ -76,47 +41,47 @@ services:
     networks:
       - backend
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - backend
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - backend
 
-  prometheus:
-    profiles: ["monitoring"]
-    image: prom/prometheus
-    volumes:
-      - ../infra/monitoring/prometheus:/etc/prometheus
-      - prometheus_data:/prometheus
-    ports:
-      - "9090:9090"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-    networks:
-      - monitoring
+  # prometheus:
+  #   profiles: ["monitoring"]
+  #   image: prom/prometheus
+  #   volumes:
+  #     - ../infra/monitoring/prometheus:/etc/prometheus
+  #     - prometheus_data:/prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--storage.tsdb.path=/prometheus"
+  #   networks:
+  #     - monitoring
 
-  grafana:
-    profiles: ["monitoring"]
-    image: grafana/grafana
-    depends_on:
-      - prometheus
-    ports:
-      - "3002:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ../infra/monitoring/grafana/provisioning:/etc/grafana/provisioning
-    networks:
-      - monitoring
+  # grafana:
+  #   profiles: ["monitoring"]
+  #   image: grafana/grafana
+  #   depends_on:
+  #     - prometheus
+  #   ports:
+  #     - "3002:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #     - ../infra/monitoring/grafana/provisioning:/etc/grafana/provisioning
+  #   networks:
+  #     - monitoring
 
 volumes:
   postgres_data:
-  redis_data:
-  prometheus_data:
-  grafana_data:
+  # redis_data:
+  # prometheus_data:
+  # grafana_data:
 
 networks:
   backend:

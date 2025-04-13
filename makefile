@@ -1,6 +1,6 @@
 # 環境変数の定義
 COMPOSE_FILES := -f docker/docker-compose.base.yml -f docker/docker-compose.dev.yml
-SERVICES := vault-service user-service gateway rest-frontend postgres redis
+SERVICES := backend frontend postgres redis
 COMPOSE_WATCH := --watch
 
 .PHONY: $(SERVICES) up build down exec restart logs install-deps prisma-migrate prisma-generate prisma-studio help
@@ -25,11 +25,11 @@ down: ## 全サービス停止
 	@docker compose $(COMPOSE_FILES) down --volumes --remove-orphans --timeout 0
 
 # サービス個別操作
-$(SERVICES): ## 個別サービス操作（例: make service=vault-service cmd="logs -f"）
+$(SERVICES): ## 個別サービス操作（例: make service=backend cmd="logs -f"）
 	@docker compose $(COMPOSE_FILES) $(cmd) $@
 
 # 共通操作
-exec: ## コンテナ内でコマンドを実行（例: make service=vault-service exec="pnpm install"）
+exec: ## コンテナ内でコマンドを実行（例: make service=backend exec="pnpm install"）
 	@docker compose $(COMPOSE_FILES) exec $(service) $(cmd)
 
 restart: ## サービスの再起動
@@ -39,17 +39,17 @@ logs: ## ログの表示
 	@docker compose $(COMPOSE_FILES) logs -f --tail=100 $(service)
 
 # 開発支援
-install-deps: ## 依存パッケージのインストール (例: make install-deps service=gateway pkg=axios)
+install-deps: ## 依存パッケージのインストール (例: make install-deps service=backend pkg=axios)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm add $(pkg) --filter @portfolio-2025/$(service)
 
 # Prisma関連
-prisma-migrate: ## Prisma マイグレーション実行 (例: make prisma-migrate service=user-service)
+prisma-migrate: ## Prisma マイグレーション実行 (例: make prisma-migrate service=backend)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run migrate:$(service) # package.json側のスクリプト名も合わせる必要あり
 
-prisma-generate: ## Prisma クライアント生成 (例: make prisma-generate service=user-service)
+prisma-generate: ## Prisma クライアント生成 (例: make prisma-generate service=backend)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run generate:$(service)
 
-prisma-studio: ## Prisma Studio 起動 (例: make prisma-studio service=user-service)
+prisma-studio: ## Prisma Studio 起動 (例: make prisma-studio service=backend)
 	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run studio:$(service) # package.json側のスクリプト名も合わせる必要あり
 
 # ヘルプ

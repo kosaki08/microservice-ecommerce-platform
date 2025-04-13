@@ -1,5 +1,4 @@
 packages:
   - "packages/*"
-  - "apps/rest-frontend"
-  - "apps/rest-backend/services/*"
-  - "apps/rest-backend/gateway"
+  - "apps/frontend"
+  - "apps/backend"

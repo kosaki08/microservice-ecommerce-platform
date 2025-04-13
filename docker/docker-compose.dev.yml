@@ -1,124 +1,63 @@
 services:
-  vault:
-    container_name: vault-dev
-    environment:
-      - VAULT_API_ADDR=http://vault-dev:8200
-      - VAULT_DEV_ROOT_TOKEN_ID=root_token_for_development
-    command: server -dev -dev-listen-address=0.0.0.0:8200 -config=/vault/config/vault-config.hcl
-    volumes:
-      - ../infra/secrets/vault/config/development:/vault/config
-
-  vault-service:
+  backend:
     build:
       context: ../
-      dockerfile: ./apps/rest-backend/services/vault-service/Dockerfile.dev
+      dockerfile: ./apps/backend/Dockerfile.dev
       args:
         ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3010/api/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/health"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 2
       start_period: 30s
     develop:
       watch:
-        - action: sync # vault-service のソース同期
-          path: ./apps/rest-backend/services/vault-service
-          target: /app/apps/rest-backend/services/vault-service
-        - action: rebuild # shared パッケージ変更時は再ビルド
+        - action: sync+restart
+          path: ./apps/backend
+          target: /app/apps/backend
+        - action: rebuild
           path: ./packages/shared
-        - action: rebuild # typescript-config 変更時も再ビルド
+        - action: rebuild
+          path: ./packages/prisma-schemas
+        - action: rebuild
           path: ./packages/typescript-config
-        - action: sync # eslint-config は同期のみ
+        - action: sync
           path: ./packages/eslint-config
           target: /app/packages/eslint-config
+    volumes:
+      - ../packages/prisma-schemas:/app/packages/prisma-schemas
+      - ../packages/shared:/app/packages/shared
+      - ../packages/prettier-config:/app/packages/prettier-config
     environment:
       - NODE_ENV=development
-      - VAULT_ADDR=http://vault-dev:8200
-      - VAULT_TOKEN=root_token_for_development
-      - LOG_LEVEL=debug
-
-  user-service:
-    build:
-      context: ../
-      dockerfile: ./apps/rest-backend/services/user-service/Dockerfile.dev
-      args:
-        ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    develop:
-      watch:
-        - action: sync+restart # user-service のソース変更時は同期して再起動
-          path: ./apps/rest-backend/services/user-service
-          target: /app/apps/rest-backend/services/user-service
-        - action: rebuild # shared パッケージ変更時は再ビルド
-          path: ./packages/shared
-    ports:
-      - "3001:3001"
-      - "3051:3051"
-    volumes: # ソースコードは develop.watch で同期
-      - ../packages/prisma-schemas:/app/packages/prisma-schemas # prisma はマウント
-      - ../packages/shared:/app/packages/shared # shared はマウント
-    environment:
-      - NODE_ENV=development
-      - USER_SERVICE_HOST=user-service
-      - USER_SERVICE_PORT=3051
-      - USER_SERVICE_HTTP_PORT=3001
       - DATABASE_URL=postgresql://user:password@postgres:5432/ecommerce
       - USER_DB_URL=postgresql://user:password@postgres:5432/ecommerce
+      - PRODUCT_DB_URL=postgresql://user:password@postgres:5432/ecommerce
+      - ORDER_DB_URL=postgresql://user:password@postgres:5432/ecommerce
+      - PAYMENT_DB_URL=postgresql://user:password@postgres:5432/ecommerce
       - REDIS_URL=redis://redis:6379
-    depends_on:
-      - postgres
-      - redis
-
-  gateway:
-    build:
-      context: ../
-      dockerfile: ./apps/rest-backend/gateway/Dockerfile.dev
-      args:
-        ENTRYPOINT_SCRIPT: ./docker/entrypoints/entrypoint-dev.sh
-    develop:
-      watch:
-        - path: ./apps/rest-backend/gateway # gateway ソース変更時は同期して再起動
-          action: sync+restart
-          target: /app/apps/rest-backend/gateway
-        - action: rebuild # shared パッケージ変更時は再ビルド
-          path: ./packages/shared
-    depends_on:
-      vault-service:
-        condition: service_healthy
-      user-service:
-        condition: service_healthy
-    environment:
-      - USER_SERVICE_HOST=user-service
-      - USER_SERVICE_PORT=3051
-      - NEST_DEBUG=true
-      - NODE_ENV=development
-      - VAULT_SERVICE_URL=http://vault-service:3010
-      - USER_SERVICE_URL=http://user-service:3001
-      - ORDER_SERVICE_URL=http://order-service:3002
-      - PAYMENT_SERVICE_URL=http://payment-service:3003
-      - PRODUCT_SERVICE_URL=http://product-service:3004
-      - GATEWAY_URL=http://gateway:3000
-      - LOG_LEVEL=debug
       - JWT_SECRET_KEY=dev_jwt_secret_for_testing
       - JWT_EXPIRES_IN=1h
       - JWT_REFRESH_SECRET_KEY=dev_jwt_refresh_secret_for_testing
       - JWT_REFRESH_EXPIRES_IN=7d
+      - LOG_LEVEL=debug
+      - APP_HTTP_PORT=8080
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
 
-  rest-frontend:
+  frontend:
     build:
       context: ../
-      dockerfile: ./apps/rest-frontend/Dockerfile.dev
+      dockerfile: ./apps/frontend/Dockerfile.dev
     develop:
       watch:
         - action: sync # frontend ソースは同期のみ
-          path: ./apps/rest-frontend
-          target: /app/apps/rest-frontend
+          path: ./apps/frontend
+          target: /app/apps/frontend
         - action: sync # ui パッケージも同期のみ
           path: ./packages/ui
           target: /app/packages/ui
@@ -130,22 +69,10 @@ services:
       - ../packages/prettier-config:/app/packages/prettier-config
     environment:
       - NODE_ENV=development
-      - VAULT_SERVICE_URL=http://vault-service:3010
-      - USER_SERVICE_URL=http://user-service:3001
-      - ORDER_SERVICE_URL=http://order-service:3002
-      - PAYMENT_SERVICE_URL=http://payment-service:3003
-      - PRODUCT_SERVICE_URL=http://product-service:3004
-      - GATEWAY_URL=http://gateway:3000
+      - NEXT_PUBLIC_API_URL=http://backend:3000
     depends_on:
-      - vault-service
-      - user-service # user-service の healthcheck を使うため依存関係に含める
-      # - order-service
-      # - payment-service
-      # - product-service
-      - gateway
-    networks:
-      - monitoring
-      - backend
+      backend:
+        condition: service_healthy
 
   postgres:
     environment:
@@ -153,44 +80,39 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: ecommerce
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+  # redis: {}
 
-  pgadmin:
-    profiles: ["debug"]
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "password"
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
+  # pgadmin:
+  #   profiles: ["debug"]
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "kazunoriosaki@gmail.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "password"
+  #   ports:
+  #     - "5050:80"
+  #   depends_on:
+  #     - postgres
 
-  redis-commander:
-    profiles: ["debug"]
-    image: rediscommander/redis-commander
-    environment:
-      - REDIS_HOSTS=redis:redis:6379
-    ports:
-      - "8081:8081"
-    depends_on:
-      - redis
+  # redis-commander:
+  #   profiles: ["debug"]
+  #   image: rediscommander/redis-commander
+  #   environment:
+  #     - REDIS_HOSTS=redis:redis:6379
+  #   ports:
+  #     - "8081:8081"
+  #   depends_on:
+  #     - redis
 
-  prometheus:
-    profiles: ["monitoring"]
-    environment:
-      - PROMETHEUS_ENV=development
-    volumes:
-      - ../infra/monitoring/prometheus:/etc/prometheus
+  # prometheus:
+  #   profiles: ["monitoring"]
+  #   environment:
+  #     - PROMETHEUS_ENV=development
+  #   volumes:
+  #     - ../infra/monitoring/prometheus:/etc/prometheus
 
-  grafana:
-    profiles: ["monitoring"]
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_AUTH_DISABLE_LOGIN_FORM=false
+  # grafana:
+  #   profiles: ["monitoring"]
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_AUTH_DISABLE_LOGIN_FORM=false

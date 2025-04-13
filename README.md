@@ -56,15 +56,8 @@
 ```
 .
 ├── apps/                          # 各アプリケーション
-│   ├── rest-frontend/             # Next.js フロントエンド
-│   └── rest-backend/
-│       ├── services/
-│       │   ├── user-service/      # ユーザーサービス (NestJS)
-│       │   ├── vault-service/     # Vault連携サービス (NestJS)
-│       │   ├── product-service/   # 商品サービス (Fastify)
-│       │   ├── order-service/     # 注文サービス (NestJS)
-│       │   └── payment-service/   # 決済サービス (NestJS)
-│       └── gateway/               # APIゲートウェイ (NestJS)
+│   ├── frontend/             # Next.js フロントエンド
+│   └── backend/
 ├── packages/                       # 共有ライブラリ
 │   ├── ui/                         # 共有UIコンポーネント (React, Tailwind CSS, shadcn/ui)
 │   ├── prisma-schemas/             # Prisma スキーマ定義と生成されたクライアント
