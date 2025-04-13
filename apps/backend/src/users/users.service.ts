@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import type { Account, Profile } from "@portfolio-2025/prisma-schemas";
-import { mapToUser } from "@portfolio-2025/shared";
-import type { User } from "@/src/auth/types/user";
+import { mapToUser, type User } from "@portfolio-2025/shared";
 import { PrismaService } from "@/src/prisma/prisma.service";
 
 @Injectable()

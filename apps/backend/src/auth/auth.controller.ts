@@ -4,10 +4,13 @@ import { AuthService } from "@/src/auth/auth.service";
 import { LoginDto } from "@/src/auth/dto/login.dto";
 import { RegisterDto } from "@/src/auth/dto/register.dto";
 import { RefreshTokenDto } from "@/src/auth/dto/refresh-token.dto";
-import type { User } from "@/src/auth/types/user";
+import type { JwtPayload } from "@portfolio-2025/shared";
 
-interface RequestWithUser extends Request {
-  user: User;
+/**
+ * JWTのペイロードを含むリクエストの型
+ */
+interface RequestWithJwtPayload extends Request {
+  user: JwtPayload;
 }
 
 @Controller("auth")
@@ -31,7 +34,7 @@ export class AuthController {
 
   @Post("logout")
   @UseGuards(JwtAuthGuard)
-  async logout(@Request() req: RequestWithUser) {
+  async logout(@Request() req: RequestWithJwtPayload) {
     return this.authService.logout(req.user);
   }
 }

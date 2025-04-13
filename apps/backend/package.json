@@ -18,7 +18,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "type-check": "tsc --pretty --noEmit",
-    "clean": "rm -rf node_modules tsconfig.tsbuildinfo .turbo dist"
+    "clean": "rm -rf node_modules tsconfig.tsbuildinfo .turbo dist",
+    "prisma-migrate": "pnpm --filter @portfolio-2025/prisma-schemas run migrate",
+    "prisma-generate": "pnpm --filter @portfolio-2025/prisma-schemas run generate",
+    "prisma-studio": "pnpm --filter @portfolio-2025/prisma-schemas run studio"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

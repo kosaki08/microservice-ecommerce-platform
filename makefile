@@ -22,6 +22,9 @@ build: ## 全サービスのビルド
 	docker compose $(COMPOSE_FILES) build --parallel
 
 down: ## 全サービス停止
+	@docker compose $(COMPOSE_FILES) down
+
+down-volumes: ## 全サービス停止（ボリュームも削除）
 	@docker compose $(COMPOSE_FILES) down --volumes --remove-orphans --timeout 0
 
 # サービス個別操作
@@ -44,13 +47,13 @@ install-deps: ## 依存パッケージのインストール (例: make install-d
 
 # Prisma関連
 prisma-migrate: ## Prisma マイグレーション実行 (例: make prisma-migrate service=backend)
-	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run migrate:$(service) # package.json側のスクリプト名も合わせる必要あり
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run migrate
 
 prisma-generate: ## Prisma クライアント生成 (例: make prisma-generate service=backend)
-	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run generate:$(service)
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run generate
 
 prisma-studio: ## Prisma Studio 起動 (例: make prisma-studio service=backend)
-	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run studio:$(service) # package.json側のスクリプト名も合わせる必要あり
+	@docker compose $(COMPOSE_FILES) exec $(service) pnpm --filter @portfolio-2025/prisma-schemas run studio
 
 # ヘルプ
 help: ## コマンド一覧表示
