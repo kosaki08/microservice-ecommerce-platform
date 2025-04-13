@@ -15,13 +15,10 @@
 
 ### API
 
-- ✅ Vault 連携 (シークレット管理)
-- 🚧 APIゲートウェイ (NestJS)
-- 🚧 ユーザーサービス (NestJS)
-- 🚧 認証機能 (JWT)
-- ⏳ 商品サービス (Fastify)
-- ⏳ 注文サービス
-- ⏳ 決済サービス
+- 🚧 ユーザー認証 (JWT)
+- ⏳ 商品API (Fastify)
+- ⏳ 注文API
+- ⏳ 決済API
 - ⏳ WebSocket によるリアルタイム機能
 
 ### フロントエンド
@@ -40,16 +37,16 @@
 
 ## 主な技術スタック
 
-| サービス名          | 機能               | 主要技術                                       |
-| ------------------- | ------------------ | ---------------------------------------------- |
-| User Service        | ユーザー認証・管理 | NestJS, Prisma                                 |
-| Product Service     | 商品管理機能       | Fastify, Prisma                                |
-| Order Service       | 注文管理機能       | NestJS, Prisma                                 |
-| Payment Service     | 決済連携機能       | NestJS, Prisma                                 |
-| Vault Service       | シークレット管理   | NestJS, node-vault                             |
-| Gateway             | APIゲートウェイ    | NestJS, JWT                                    |
-| REST Frontend       | フロントエンド     | Next.js v15, React 19, Tailwind CSS, shadcn/ui |
-| Prometheus, Grafana | モニタリング       | prom-client                                    |
+| 区分           | 機能/役割      | 主要技術                                      |
+| -------------- | -------------- | --------------------------------------------- |
+| Backend        | APIサーバー    | NestJS, Prisma                                |
+| Frontend       | UIレンダリング | Next.js 15, React 19, Tailwind CSS, shadcn/ui |
+| Database       | データ永続化   | PostgreSQL                                    |
+| Monorepo       | コード管理     | Turborepo                                     |
+| Packages       | 共通ライブラリ | @portfolio-2025/shared, @portfolio-2025/ui    |
+| Authentication | 認証機能       | JWT                                           |
+| Monitoring     | 監視           | Prometheus, Grafana, prom-client              |
+| Development    | 開発環境       | Docker, Docker Compose, Makefile              |
 
 ## ディレクトリ構成
 
@@ -76,21 +73,21 @@
 
 プロジェクトルートで `make` コマンドを実行することで、一般的なタスクを実行できます。
 
-| コマンド                                                      | 説明                                                                                                      |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `make help`                                                   | 利用可能なコマンドの一覧と説明を表示します                                                                |
-| `make up`                                                     | 開発環境のコンテナを起動します (ファイルの変更を監視)                                                     |
-| `make up-build`                                               | コンテナイメージをビルドして起動します                                                                    |
-| `make up-debug`                                               | デバッグ用プロファイル (pgAdmin, Redis Commander など) を含めて起動します                                 |
-| `make up-monitoring`                                          | モニタリング用プロファイル (Prometheus, Grafana) を含めて起動します                                       |
-| `make down`                                                   | 全ての開発環境コンテナを停止し、ボリュームも削除します                                                    |
-| `make build`                                                  | Dockerイメージをビルドします                                                                              |
-| `make logs service=<service_name>`                            | 指定したサービスのログを表示します (例: `make logs service=user-service`)                                 |
-| `make exec service=<service_name> cmd="<command>"`            | 指定したサービスのコンテナ内でコマンドを実行します (例: `make exec service=user-service cmd="ls -l"`)     |
-| `make install-deps service=<service_name> pkg=<package_name>` | 指定したサービスに依存パッケージを追加します (例: `make install-deps service=gateway pkg=axios`)          |
-| `make prisma-migrate service=<db_service_name>`               | 指定したサービスに関連するDBマイグレーションを実行します (例: `make prisma-migrate service=user-service`) |
-| `make prisma-generate service=<db_service_name>`              | 指定したサービスに関連するPrisma Clientを生成します (例: `make prisma-generate service=user-service`)     |
-| `make prisma-studio service=<db_service_name>`                | 指定したサービスに関連するPrisma Studioを起動します (例: `make prisma-studio service=user-service`)       |
+| コマンド                                                  | 説明                                                                                                                      |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `make help`                                               | 利用可能なコマンドの一覧と説明を表示します                                                                                |
+| `make up`                                                 | 開発環境のコンテナ (`backend`, `frontend`, `postgres`等) を起動します (ファイルの変更を監視)                              |
+| `make up-build`                                           | コンテナイメージをビルドして起動します                                                                                    |
+| `make up-debug`                                           | デバッグ用プロファイル (pgAdmin, Redis Commander など) を含めて起動します                                                 |
+| `make up-monitoring`                                      | モニタリング用プロファイル (Prometheus, Grafana) を含めて起動します                                                       |
+| `make down`                                               | 全ての開発環境コンテナを停止し、ボリュームも削除します                                                                    |
+| `make build`                                              | Dockerイメージをビルドします                                                                                              |
+| `make logs service=<app_name>`                            | 指定したアプリ (`backend` or `frontend`) のログを表示します (例: `make logs service=backend`)                             |
+| `make exec service=<app_name> cmd="<command>"`            | 指定したアプリ (`backend` or `frontend`) のコンテナ内でコマンドを実行します (例: `make exec service=backend cmd="ls -l"`) |
+| `make install-deps service=<app_name> pkg=<package_name>` | 指定したアプリ (`backend` or `frontend`) に依存パッケージを追加します (例: `make install-deps service=backend pkg=axios`) |
+| `make prisma-migrate`                                     | DBマイグレーションを実行します                                                                                            |
+| `make prisma-generate`                                    | Prisma Clientを生成します                                                                                                 |
+| `make prisma-studio`                                      | Prisma Studioを起動します                                                                                                 |
 
 ## ドキュメント
 

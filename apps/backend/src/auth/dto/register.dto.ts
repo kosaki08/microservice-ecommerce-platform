@@ -1,6 +1,16 @@
-export interface RegisterDto {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
+import { IsEmail, IsString, MinLength } from "class-validator";
+
+export class RegisterDto {
+  @IsEmail()
+  email!: string;
+
+  @IsString()
+  @MinLength(8)
+  password!: string;
+
+  @IsString()
+  firstName!: string;
+
+  @IsString()
+  lastName!: string;
 }

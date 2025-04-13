@@ -1,53 +1,37 @@
-import { Controller } from "@nestjs/common";
-import { MessagePattern } from "@nestjs/microservices";
-import type { LoginDto } from "@/src/auth/dto/login.dto";
-import type { RegisterDto } from "@/src/auth/dto/register.dto";
+import { JwtAuthGuard } from "@/src/auth/jwt-auth.guard";
+import { Post, UseGuards, Request, Body, Controller, ValidationPipe } from "@nestjs/common";
+import { AuthService } from "@/src/auth/auth.service";
+import { LoginDto } from "@/src/auth/dto/login.dto";
+import { RegisterDto } from "@/src/auth/dto/register.dto";
+import { RefreshTokenDto } from "@/src/auth/dto/refresh-token.dto";
 import type { User } from "@/src/auth/types/user";
 
-@Controller()
+interface RequestWithUser extends Request {
+  user: User;
+}
+
+@Controller("auth")
 export class AuthController {
-  @MessagePattern("auth.validate")
-  public validate(data: LoginDto): User | null {
-    // 一時的なモック実装
-    if (data.email === "test@example.com" && data.password === "password123") {
-      return {
-        id: "1",
-        email: data.email,
-        firstName: "Test",
-        lastName: "User",
-      };
-    }
-    return null;
+  constructor(private readonly authService: AuthService) {}
+
+  @Post("login")
+  async login(@Body(ValidationPipe) loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
-  @MessagePattern("auth.register")
-  public register(data: RegisterDto): User {
-    // 一時的なモック実装
-    return {
-      id: "1",
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-    };
+  @Post("register")
+  async register(@Body(ValidationPipe) registerDto: RegisterDto) {
+    return this.authService.register(registerDto);
   }
 
-  @MessagePattern("auth.findById")
-  public findById(data: { id: string }): User | null {
-    // 一時的なモック実装
-    if (data.id === "1") {
-      return {
-        id: "1",
-        email: "test@example.com",
-        firstName: "Test",
-        lastName: "User",
-      };
-    }
-    return null;
+  @Post("refresh")
+  async refresh(@Body(ValidationPipe) refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refresh(refreshTokenDto);
   }
 
-  @MessagePattern("auth.logout")
-  public logout(): void {
-    // 一時的なモック実装
-    return;
+  @Post("logout")
+  @UseGuards(JwtAuthGuard)
+  async logout(@Request() req: RequestWithUser) {
+    return this.authService.logout(req.user);
   }
 }

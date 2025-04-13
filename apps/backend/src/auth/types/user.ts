@@ -1,6 +1,6 @@
-import type { Account } from "@portfolio-2025/prisma-schemas/user-service";
-
-export type User = Pick<Account, "id" | "email"> & {
+export interface User {
+  id: string;
+  email: string;
   firstName: string;
   lastName: string;
-};
+}
