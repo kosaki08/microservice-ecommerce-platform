@@ -1,13 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import type { Account, Profile } from "@portfolio-2025/prisma-schemas";
 import { mapToUser, type User } from "@portfolio-2025/shared";
 import { PrismaService } from "@/src/prisma/prisma.service";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly logger: Logger = new Logger(UsersService.name),
+  ) {}
 
   async findById(id: string): Promise<User | null> {
+    this.logger.log(`findById: ${id}`);
     const account = await this.prisma.account.findUnique({
       where: { id },
       include: { profile: true },
@@ -21,6 +25,8 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
+    this.logger.log(`findAll`);
+
     const accounts = await this.prisma.account.findMany({
       include: { profile: true },
       where: { deleted_at: null },

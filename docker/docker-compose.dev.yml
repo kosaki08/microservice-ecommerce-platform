@@ -13,7 +13,7 @@ services:
       start_period: 30s
     develop:
       watch:
-        - action: sync+restart
+        - action: sync
           path: ../apps/backend
           target: /app/apps/backend
         - action: rebuild

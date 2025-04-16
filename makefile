@@ -7,16 +7,19 @@ COMPOSE_WATCH := --watch
 
 # 基本コマンド
 up: ## 全サービス起動（開発環境）
-	docker compose $(COMPOSE_FILES) up $(COMPOSE_WATCH)
+	docker compose $(COMPOSE_FILES) up
 
 up-build: ## ビルドして起動
-	docker compose $(COMPOSE_FILES) up --build $(COMPOSE_WATCH)
+	docker compose $(COMPOSE_FILES) up --build
+
+up-watch: ## ファイル変更を監視して起動
+	docker compose $(COMPOSE_FILES) up $(COMPOSE_WATCH)
 
 up-debug: ## debug profile付きで起動
-	docker compose $(COMPOSE_FILES) --profile debug up --build $(COMPOSE_WATCH)
+	docker compose $(COMPOSE_FILES) --profile debug up --build
 
 up-monitoring: ## monitoring profile付きで起動
-	docker compose $(COMPOSE_FILES) --profile monitoring up --build $(COMPOSE_WATCH)
+	docker compose $(COMPOSE_FILES) --profile monitoring up --build
 
 build: ## 全サービスのビルド
 	docker compose $(COMPOSE_FILES) build --parallel

@@ -9,6 +9,11 @@ async function bootstrap(): Promise<void> {
   const metricsService = app.get(MetricsService);
   const configService = app.get(ConfigService);
 
+  // グローバルプレフィックスを設定
+  app.setGlobalPrefix("api/v1", {
+    exclude: ["health", "metrics"], // '/health', '/metrics' パスはプレフィックスの対象外に
+  });
+
   // Metrics
   app.useGlobalInterceptors(new MetricsInterceptor(metricsService));
 
