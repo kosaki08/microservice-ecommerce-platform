@@ -11,21 +11,8 @@ services:
       timeout: 5s
       retries: 2
       start_period: 30s
-    develop:
-      watch:
-        - action: sync
-          path: ../apps/backend
-          target: /app/apps/backend
-        - action: rebuild
-          path: ../packages/shared
-        - action: rebuild
-          path: ../packages/prisma-schemas
-        - action: rebuild
-          path: ../packages/typescript-config
-        - action: sync
-          path: ../packages/eslint-config
-          target: /app/packages/eslint-config
     volumes:
+      - ../apps/backend:/app/apps/backend
       - ../packages/prisma-schemas:/app/packages/prisma-schemas
       - ../packages/shared:/app/packages/shared
       - ../packages/prettier-config:/app/packages/prettier-config
@@ -42,8 +29,8 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - postgres
-      # condition: service_healthy
+      postgres:
+        condition: service_healthy
       # redis:
       #   condition: service_started
 
@@ -51,17 +38,9 @@ services:
     build:
       context: ../
       dockerfile: ./apps/frontend/Dockerfile.dev
-    develop:
-      watch:
-        - action: sync # frontend ソースは同期のみ
-          path: ../apps/frontend
-          target: /app/apps/frontend
-        - action: sync # ui パッケージも同期のみ
-          path: ../packages/ui
-          target: /app/packages/ui
-        - action: rebuild # typescript-config 変更時は再ビルド
-          path: ../packages/typescript-config
     volumes:
+      - ../apps/frontend:/app/apps/frontend
+      - ../packages/ui:/app/packages/ui
       - ../packages/typescript-config:/app/packages/typescript-config
       - ../packages/eslint-config:/app/packages/eslint-config
       - ../packages/prettier-config:/app/packages/prettier-config

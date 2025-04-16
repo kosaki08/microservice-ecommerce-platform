@@ -1,7 +1,6 @@
 # 環境変数の定義
 COMPOSE_FILES := -f docker/docker-compose.base.yml -f docker/docker-compose.dev.yml
 SERVICES := backend frontend postgres redis
-COMPOSE_WATCH := --watch
 
 .PHONY: $(SERVICES) up build down exec restart logs install-deps prisma-migrate prisma-generate prisma-studio help
 
@@ -11,9 +10,6 @@ up: ## 全サービス起動（開発環境）
 
 up-build: ## ビルドして起動
 	docker compose $(COMPOSE_FILES) up --build
-
-up-watch: ## ファイル変更を監視して起動
-	docker compose $(COMPOSE_FILES) up $(COMPOSE_WATCH)
 
 up-debug: ## debug profile付きで起動
 	docker compose $(COMPOSE_FILES) --profile debug up --build
